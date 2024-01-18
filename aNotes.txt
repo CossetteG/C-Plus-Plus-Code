@@ -1,0 +1,162 @@
+Notes for C++
+
+prof. Gabriel Raymer
+TA Tyler Rees
+
+email the prof. 
+
+Late work- keep it within reason and you'll get credit
+Don't be late on projects 
+code pretty fires
+
+cobol is used in banking
+
+zybooks- paid for (:
+)-has 6 projects
+
+c is the basic assembly
+c sharp is an open-source programming language
+c+ and c++ have more 
+
+internet has been a normal thing since 1995 
+
+Module 1:
+
+hello world, user input
+
+source file > compile > object file > link > executable file 
+
+cout << (output to console)
+cin >> (input from console)  
+
+developing with repl.it 
+
+static and dynamic typing- python is dynamic, c++ is static
+you declare the type of the variable up front
+size is determined at compile time
+
+
+
+Variables and Assignments
+
+built-in: bool, char, int, float, double
+integers- short, long, longlong, unsigned, __int8, int16, in32, etc
+double replaces float- different bit count ( 32f v 64d )
+long double has maximum precision
+
+#include <iostream>
+#inclue <iomanip>
+#include <math>
+
+using namespace std;
+
+int main(){
+    double sphereVolume;
+    double sphereRadius;
+
+    cin >> sphereRadius;
+}
+
+Numeric Literals- can use ' as a group separator
+0b1011'0011'0001'1000   binary
+0xB318                  hex
+1'000'000               decimal
+1.23e5                  decimal
+
+integer division- if both operands are integers, the remainder is dropped
+if either is a floating-point, the remainder is kept
+    if you cast as integer- it is dropped< narrowing conversion
+
+be careful with compiling too much stuff- you can put everythin in 1 folder tho
+
+int main(){
+    int n = 3/2;
+    auto m = 3/2.0;
+    int k {3/2};
+    cout << n << ", " << m << ", " << k << endl;
+}
+
+math with large integers can overflow- silent error
+
+signed int - cut the size of the int in half to include its counterparts in negative
+unsigned int- normal positive int with a set size 
+
+int main(){
+    singed int n = INT_MAX
+    cout << n << endl;
+    cout << n+1 << endl;
+
+    unsigned int n = INT_MAX
+    cout << n << endl;
+}
+
+floats are limited to 32 bits, doubles are 64 bits 
+as numbers grows bigger, they are spaced further apart
+
+the computer skips integers when numbers get really really big- rounding error
+^floating put
+
+
+
+Control Flow AKA Switches and IF statements
+
+code-cotta- practicing the same code over and over to get muscle memory for coding
+
+We'll start doing projects will start in February
+
+watchlist- watch the variables to see what it's set to
+call stack- where code resides in memory 
+use your compiler!!
+
+if..else if..else
+the condition must be in parentheses
+If you have multiple lanes in a branch, use blocks:
+{
+    <line 1>
+    <line 2>
+}
+
+Order of evaluation:
+() ! */% +- <><=>= ==!= && ||
+
+m<x<n is not allowed, use m<x && x<n
+when in doubt, use parentheses
+
+Bitwise operations
+used to access bits of a variable 
+-to control aspects of your operating systems hardware
+-can save memory in certain applications
+
+| or & and ^ xor ~ not >> shift right << shift left 
+be careful to not lose bits 
+xor is one or the other but not both 
+
+switches and cases
+if / if else / else 
+
+switch (a) {
+    case 0:
+        //
+        break;
+    case 1:
+        //
+        break;
+    default:
+        //
+        break;
+}
+if you don't have a break statement, it'll read the block and go to the next one 
+until it reaches a break 
+
+to get a char at pos k from str s 
+s.at(k)  <<checks that the position is valid
+s[k]
+
+ternary operators: _?_:_   <Condition>? <TrueResult>:<FalseResult> 
+shorthand for an if else that yields a value and can nest
+
+recursion 
+
+fact(n):{
+    n==1? cout<<n:fact(n-1);
+}
