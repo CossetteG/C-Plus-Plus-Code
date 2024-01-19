@@ -160,3 +160,160 @@ recursion
 fact(n):{
     n==1? cout<<n:fact(n-1);
 }
+
+
+ok lets break down a hello world
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello World";
+    cout << endl;
+}
+
+#include <iostream>
+//variable values mostly go in <> I think idk ask later
+using namespace std;
+// import statements. idk we'll get into it later
+
+char main() {
+//char is the return value is supposed to be a character. can also be int or whatever
+//main is the main function. most c languages have main every time
+//parentheses to denote a function. as per usual
+//open curly brackets- anything in the curly brackets is in the function
+    cout << "Hello World";
+    //cout (c-out) for characters out- basically the print statement
+    //the pointer points to the direction the variable is going to 
+    //so the "Hello World" variable will go into the cout function 
+    cout << endl;
+    //another cout to end the line. you could also put in the same line as the first but whatevs
+    //technically endl starts a new line 
+    //always end your line with ;
+}
+//always end your func with close curly bracket 
+
+"string literal"
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   int drivingYear;
+   int drivingAge;
+   int numStates; 
+    //declaring some variables here
+
+   drivingYear = 2014;
+   drivingAge = 18;
+   numStates = 10; 
+    //and setting them some values. No you cannot declare them and set them in the same line
+
+   cout << "In " << drivingYear << " the driving age is " << drivingAge << "." << endl;
+    // you can put more stuff in one line by using more pointers
+   cout << numStates << " states have exceptions." << endl;
+  
+
+   return 0;
+}
+
+//single line comment
+
+/*
+mulitline or block comment
+*/
+
+ERRORS
+
+syntax error aka compile time error:
+
+main.cpp:6:27: error: expected ';' after expression
+   cout << "Traffic today" 
+                          ^
+                          ;
+
+the compiler will give you all the errors it finds in numerical order 
+but some errors are side effects of previous errors
+so start with the first one it gives you
+
+other errors include logic errors- aka bugs
+
+compilers turn c-language into executable binary code 
+
+
+Loops 
+
+while- the condition must be in parentheses
+do while- the condition is checkd after the loop body runs 
+good for undetermined amount of runs
+
+for -start/condition/step or range-based loop 
+good for a determined amount of runs 
+
+int i;
+while (cin >> i)
+  cout << "You entered "<<i<<endl; 
+//this code just returns the int you put into it
+
+ctr d to exit loops and stuff 
+
+check your input with while loops 
+
+int i;
+cout<<"Enter a number btwn 1-5: ";
+cin>>n;
+while(n<1||n>5) {
+    cout << "Enter num 1-5" ;
+    cin >> n;
+}
+cout << "You entered: " << n << endl:
+
+int n;
+do {
+    cout<<"Enter a number btwn 1-5:";
+    cin>>n;
+} while (n<1||n>5) {
+    whatever;
+}
+
+for loop is technically a shorthand for a while loop 
+the scope of loop variables are always contrained to inside the loop 
+
+equivalent loops 
+
+for( int i= 0; 1<5; ++i)
+    cout<<i<<""; 
+    cout<<endl;
+
+string s = "hello";
+for (char c:s)
+    cout<<c<<endl;
+//c is the loop variable it takes on each value of the sequence in turn 
+
+for (char c:input_word) {
+    if(isalpha(c)) {
+        ++num_letters
+    }
+}
+
+Truthiness Idiom - a numeric expression is true when it is non-zero 
+isalpha nad other <cctype> functions don't return true when its argument is a letter 
+as a general rule check for false rather than true 
+
+functions tolower and toupper - they return ints!
+to print as characters- cast to char or store in char variable 
+
+break and continue 
+break exites the closest enclosing loop
+continue cycles on the closest enclosing loop 
+^more for error handling 
+
+all named values have a scope - the region where it is visible 
+{
+    //arbitrary scope
+    ::i //global variable 
+}
+
+enums are compile-time constants 
+enum is like a fancy array /dict 
+
