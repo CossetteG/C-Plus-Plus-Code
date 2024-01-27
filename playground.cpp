@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
     int i;
-    cout << "Hello World blerggggg" << endl;
+    cout << "Hello World boogie oogie" << endl;
 
     return 0;
 }

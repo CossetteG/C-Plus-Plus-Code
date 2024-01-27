@@ -317,3 +317,406 @@ all named values have a scope - the region where it is visible
 enums are compile-time constants 
 enum is like a fancy array /dict 
 
+The syntax for outputting the double myFloat with two digits after the decimal point is
+cout << fixed << setprecision(2) << myFloat;
+Though C++ does not attempt to output the full value of pi,
+ by default, 5 digits after the decimal are output.
+fixed and setprecision() are manipulators that need only be written once if the 
+desired number of digits after the decimal point is the same for multiple floating-point numbers. Ex:
+
+cout << fixed << setprecision(3) << 3.1244 << endl;
+cout << 2.1 << endl;
+outputs 3.124 and 2.100.
+
+scientific notation is written using an e preceding the power-of-10 exponent, as in 6.02e23 to represent 6.02 x 1023.
+ The e stands for exponent. Likewise, 0.001 is 1 x 10-3 and can be written as 1.0e-3.
+
+A few common math functions from the math library.
+Function	Behavior	          Example
+sqrt(x)	    Square root of x	  sqrt(9.0) evaluates to 3.0.
+pow(x, y)	Power:                pow(6.0, 2.0) evaluates to 36.0.
+fabs(x)	    Absolute value of x   fabs(-99.5) evaluates to 99.5.
+
+modulo % is only for integers- it returns the remainder 
+anything % 0 is undefined 
+
+randNum % 10
+Yields 0 - 9 
+
+
+Sequences and Functions - Vectors and Arrays
+
+std::vector (like a list in python)
+a generic container (variables)
+can hold obhects of any type, but ony one type at a time
+holds them in a sequence, and can grow at runtime to hold more items
+can use indexing and iterators 
+vector<int> = (v[0], v[1], v[2] ...)
+
+vectors allocate more memory than needed, so you don't have to reallocate memory everytime you add an element
+when memory is exhausted, more memory is allocated
+functions: elem space last alloc 
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main () {
+    double time1;
+    double time2;
+    double time3;
+    double time4;
+    double time5;
+
+    cin >> time1;
+    cin >> time2;
+    cin >> time3;
+    cin >> time4;
+    cin >> time5;
+
+    vector <double> walkingTime = {time1, time2, time3, time4, time5}; 
+      //natively C++ doesn't have the = assignment operator 
+
+    for (i = 0; i < walkingTime.size();, ++1) {
+        cout << walkingTime.at(i) << " ";
+    }
+    cout << endl;
+}
+
+    vector <int> swimmingListings (numPeople); //a list with the amount of stuff numPeople 
+    swimmingListings.at(0) = firstPerson;
+    swimmingListings.at(numPeople - 1) = lastPerson;
+
+    //
+    cin >>numTime;
+    vector <int> bikingLobs(numTime);
+
+    for (i = 0; i < bikingLobs.size(); ++i) {
+        cin >> bikingLobs.at(i);
+    }
+
+    for (i = 0; i < bikingLobs.size(); ++i) {
+        if bikingLobs.at(i) != 9{
+            cout << bikingLobs.at(i) << endl;
+        }
+    }
+
+    //
+    for (i = 0; i < numStudents.size(); ++i) {
+        if (walkingListings.at(i) % 2 == 0) {
+            cout << walkingListings.at(i) << "-";
+        }
+    }
+    cout << endl;
+
+    for (i = 0; i < numStudents.size(); ++i) {
+        if (walkingListings.at(i) % 2 == 1) {     //example used != 0
+            cout << walkingListings.at(i) << "-";
+        }
+    }
+    cout << endl;
+
+vector<int> v(5); // [0,0,0,0,0] 
+to avoid pain points: initalize things with 0 or empty strings as much as possible 
+
+int main(){
+    vector<int> myVect(5):
+    for (int n:myVect)
+        cout << n << ' ';
+    cout << endl;
+}
+
+cout streams everything into a strings
+vector::resize grows a vector 0 for numbers, "" for strings 
+    resize  can also shrink your vectors, and extra stuff may or may not stay in memory 
+reserve is more efficient, it allowcates memory space to grow your vector 
+
+    vector<int> v = {1,2,3,4,5};
+    v.reserve(10);
+    for (auto n: v)
+        cout << n << endl;
+
+vector::push_back 
+    automatically expands the vector if the current memory allocation is exhausted 
+
+    while (f >> num)
+        v.push_back(f):
+
+modifying vector element- at or [i]
+
+for (int& n:v)
+    n += 2; //passby reference- it edits the variable directly
+
+The keyword auto tells the compiler to determine the variable's type using the initial value given.
+auto w = 0.5;	w	double
+const auto x = 7;	x	const int
+
+#include <iostream>
+using namespace std;
+
+int main() {
+  auto x = 4.5;
+
+  cout << typeid(x).name();
+
+  return 0;
+}
+
+The static_cast operator (static_cast<type>(expression)) converts the expression's value to the indicated type. 
+Ex: If myIntVar is 7, then static_cast<double>(myIntVar) converts int 7 to double 7.0.
+
+   int kidsInFamily1;       // Should be int, not double
+   int kidsInFamily2;       // (know anyone with 2.3 kids?)
+   int numFamilies; 
+   
+   double avgKidsPerFamily; // Expect fraction, so double
+
+   kidsInFamily1 = 3;
+   kidsInFamily2 = 4;
+   numFamilies = 2; 
+   
+   avgKidsPerFamily = static_cast<double>(kidsInFamily1 + kidsInFamily2)
+                      / static_cast<double>(numFamilies); 
+
+Binary
+you can use binary literals using th 0b prefix
+
+int n = 0b101;
+cout << n << endl;  // 5
+
+number = placeValue*base^placePosition (counting down to 1)
+
+Decimal Numbers:
+base = 10
+212 - 2*10^2 + 1*10^1 + 2*10^0
+    =    200 +   10   +   2   = 212 
+
+Binary Numbers:
+Base 2
+1101 - 1*2^3 + 1*2^2 + 0*2^1 + 0*2^0
+     =    8  +   4   +   0   +  1   = 13
+
+1 2 4 8 16 32 64 128 256 512 1024 2048
+
+A variable of char type, as in char myChar;, can store a single character like the letter m. 
+A character literal is surrounded with single quotes, as in myChar = 'm';.
+
+   char arrowBody;
+   char arrowHead;
+
+   arrowBody = '-';
+   arrowHead = '>';
+
+BINARY IN ASCII STANDARD 
+
+010 0000	32	space
+010 0001	33	!
+010 0010	34	"
+010 0011	35	#
+010 0100	36	$
+010 0101	37	%
+010 0110	38	&
+010 0111	39	'
+010 1000	40	(
+010 1001	41	)
+010 1010	42	*
+010 1011	43	+
+010 1100	44	,
+010 1101	45	-
+010 1110	46	.
+010 1111	47	/
+011 0000	48	0
+011 0001	49	1
+011 0010	50	2
+011 0011	51	3
+011 0100	52	4
+011 0101	53	5
+011 0110	54	6
+011 0111	55	7
+011 1000	56	8
+011 1001	57	9
+011 1010	58	:
+011 1011	59	;
+011 1100	60	<
+011 1101	61	=
+011 1110	62	>
+011 1111	63	?
+100 0000	64	@
+100 0001	65	A
+100 0010	66	B
+100 0011	67	C
+100 0100	68	D
+100 0101	69	E
+100 0110	70	F
+100 0111	71	G
+100 1000	72	H
+100 1001	73	I
+100 1010	74	J
+100 1011	75	K
+100 1100	76	L
+100 1101	77	M
+100 1110	78	N
+100 1111	79	O
+101 0000	80	P
+101 0001	81	Q
+101 0010	82	R
+101 0011	83	S
+101 0100	84	T
+101 0101	85	U
+101 0110	86	V
+101 0111	87	W
+101 1000	88	X
+101 1001	89	Y
+101 1010	90	Z
+101 1011	91	[
+101 1100	92	\
+101 1101	93	]
+101 1110	94	^
+101 1111	95	_
+110 0000	96	`
+110 0001	97	a
+110 0010	98	b
+110 0011	99	c
+110 0100	100	d
+110 0101	101	e
+110 0110	102	f
+110 0111	103	g
+110 1000	104	h
+110 1001	105	i
+110 1010	106	j
+110 1011	107	k
+110 1100	108	l
+110 1101	109	m
+110 1110	110	n
+110 1111	111	o
+111 0000	112	p
+111 0001	113	q
+111 0010	114	r
+111 0011	115	s
+111 0100	116	t
+111 0101	117	u
+111 0110	118	v
+111 0111	119	w
+111 1000	120	x
+111 1001	121	y
+111 1010	122	z
+111 1011	123	{
+111 1100	124	|
+111 1101	125	}
+111 1110	126	~
+
+Arrays 
+arrays are part of the language, you don't have to #include anything 
+they are efficieint but harder to manage- the size is fixed, they can't expand 
+
+vectors are part of the library #include<vector> 
+they have more overhead than arrays  
+
+Arrays do not grow- once it's compiled it won't grow 
+Vectors have overhead to manage automatic expansion 
+
+you must remember the array size /keep track of the array size 
+
+const int NUM_VALS = 4;
+int courseGrades[NUM_VALS];
+int i;
+
+for (i = 0; i < NUM_VALS; ++i) {
+    cin >> courseGrades[i]
+}
+
+countdown loop:
+for (i = NUM_VALS; i >= 0; --i) {}
+
+by default arrays have no initialization 
+you can zero-initalize it with {}
+If you don't initiaize it and you try to call it, you'll get whatever garbage is in that memory spot 
+
+int c[] = {1,2,3};
+for (auto i: c)
+    cout << i << endl;
+
+arrays can use indexing but you must not go out of bounds 
+or use a range-based for loop 
+functions strip arrays when you pass them in
+if you go out of bounds at low level, you'll corrupt the surrounding memory
+
+Dimensional Arrays- arrays can be nested/ have multiple dimensions 
+higher dimensions are harder to visualize 
+
+int a[2][3] = {{1,2,3}, {4,5,6}}
+
+sizeof(myarray) in an array calculates the number of bites allocated to it //an int is 4 bites 
+myarray.size() in an array tells you how many things are in the array 
+
+c-style strings aka an array of characters 
+uses \0 to mark the end of the string 
+<cstring> library 
+
+char name[4] = "Amy" ( A m y \0)
+
+strlen strcmp strcpy strncpy strcat strncat (cstring functions) 
+stoi (str to int) stof stod 
+
+can be dangerous! 
+
+RUNNING CODE 
+
+g++ playground.cpp -o b 
+cd C:\Users\cosse\Desktop\msys2\ucrt64\bin\projects\helloworld\ 
+.\b.exe
+
+Escape sequence	    Char
+\n	                newline
+\t	                tab
+\'	                single quote
+\"	                double quote
+\\	                backslash
+
+STRINGS 
+
+character literals use '' string literals use ""
+needs #include <string>
+
+to get a input into a string including spaces:
+getline(cin, firstString);
+getline(cin, secondString);
+
+   cout << "Enter first name:" << endl;
+   getline(cin, firstName); // Gets entire line up to ENTER
+   // Skip newline
+    getline(cin, tmpStr);
+    getline(cin, str2);
+
+Numbers
+
+INT Overflow- don't try to store a number larger than 2 billion in an int it will overflow and
+ only store the overflow amount 
+^results in a compiler warning
+
+if you're using something that big, use a long long (that can overflow too if given a high enough value)
+
+(*int) Unfortunately, int's size is the processor's "natural" size, and not necessarily 32 bits. 
+Fortunately, nearly every compiler allocates at least 32 bits for int.
+
+Numerical Variable Types:
+Declaration	        Size	      Supported number range	             Standard-defined minimum size
+char myVar;	        8 bits	      -128 to 127	                                            8 bits
+short myVar;	    16 bits	      -32,768 to 32,767	                                        16 bits
+long myVar;	        32 bits	      -2,147,483,648 to 2,147,483,647	                        32 bits
+long long myVar;	64 bits	      -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807	64 bits
+int myVar;	        32 bits	      -2,147,483,648 to 2,147,483,647	                        16 bits
+
+float x;	        32 bits	      -3.4x1038 to 3.4x1038
+double x;	        64 bits	      -1.7x10308 to 1.7x10308
+
+        mantissa is limited to about 7 significant digits for float and about 16 significant digits for double. 
+        Anything with more values is truncated
+        Floats store a sign(+/-), exponent(where the decimal is), and mantissa (the numerical values)
+
+unsigned char myVar;	    8 bits	    0 to 255	                                    8 bits
+unsigned short myVar;	    16 bits	    0 to 65,535	                                    16 bits
+unsigned long myVar;	    32 bits	    0 to 4,294,967,295	                            32 bits
+unsigned long long myVar;	64 bits	    0 to 18,446,744,073,709,551,615 	            64 bits
+unsigned int myVar;	        32 bits	    0 to 4,294,967,295	                            16 bits
+
