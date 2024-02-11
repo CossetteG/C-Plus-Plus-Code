@@ -281,7 +281,7 @@ the scope of loop variables are always contrained to inside the loop
 
 equivalent loops 
 
-for( int i= 0; 1<5; ++i)
+for( int i= 0; i<5; ++i)
     cout<<i<<""; 
     cout<<endl;
 
@@ -719,4 +719,422 @@ unsigned short myVar;	    16 bits	    0 to 65,535	                              
 unsigned long myVar;	    32 bits	    0 to 4,294,967,295	                            32 bits
 unsigned long long myVar;	64 bits	    0 to 18,446,744,073,709,551,615 	            64 bits
 unsigned int myVar;	        32 bits	    0 to 4,294,967,295	                            16 bits
+
+Order of Operations 
+
+Operator/Convention	Description	                                    Explanation
+( )             	Items within parentheses are evaluated first	In (a * (b + c)) - d, the + is evaluated first, then *, then -.
+!	                ! (logical NOT) is next	! x || y is evaluated as (!x) || y
+* / % + -	        Arithmetic operators (using their precedence rules; see earlier section)	z - 45 * y < 53 evaluates * first, then -, then <.
+<   <=   >   >=	    Relational operators	x < 2 || x >= 10 is evaluated as (x < 2) || (x >= 10) because < and >= have precedence over ||.
+==   !=	            Equality and inequality operators	x == 0 && x != 10 is evaluated as (x == 0) && (x != 10) because == and != have precedence over &&.
+== and !=           have the same precedence and are evaluated left to right.
+&&	                Logical AND	x == 5 || y == 10 && z != 10 is evaluated as (x == 5) || ((y == 10) && (z != 10)) because && has precedence over ||.
+||	                Logical OR	|| has the lowest precedence of the listed arithmetic, logical, and relational operators.
+
+basically P!EMDAS, Alligators, ANDS, and ORS
+
+& and | are bitwise operators and should only be used in bitwise expressions
+
+|   bitwise-OR                  
+&   bitwise-AND              
+^   bitwise-XOR
+~   bitwise-NOT
+>>  shift-right (multiply by 2)
+<<  shift-left (divide by 2)
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    auto x = byte(0b00101101);      // 45
+    cout << int(x) << endl;
+    auto y = byte(0b01101010);      // 106
+    cout << int(y) << endl;
+    cout << int(x | y) << endl;     // 01101111 = 64+32+8+4+2+1 = 111
+    cout << int(x & y) << endl;     // 00101000 = 32+8 =40
+    cout << int(x ^ y) << endl;     // 01000111 = 64+4+2+1 = 71
+
+    cout << int(~x) << endl;        // 11010010 = 128+64+16+2 = 210
+}
+
+/* Output:
+45
+106
+111
+40
+71
+210
+*/
+
+double bang idiom:
+ auto bitval = !!(n & mask);     // !32 == 0, !(!32) == !0 == 1
+ to change a mask or an int into a true/false value
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 0; //orig 32
+    auto b = !n;        // b == false (boolean)
+    auto not_b = !b;    // not_b == true (boolean)
+    cout << boolalpha;  // Print bools as words
+    cout << "b: " << b << ", as int: " << int(b) << endl;
+    cout << "not_b: " << not_b << ", as int: " << int(not_b) << endl;
+    cout << "!!n == " << !!n << ", as int: " << int(!!n) << endl;
+}
+
+To extract the lower k bits of an integer you need a mask with the lower k bits set. This is easily obtained by the expression:
+
+    mask = (1 << k) - 1
+
+#include <bitset>
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Enter an integer to extract from: ";
+    unsigned int n;
+    cin >> n;
+    cout << "n = " << n << " = " << bitset<32>(n) << endl;
+
+    cout << "Enter the number of lower bits: ";
+    unsigned int k;
+    cin >> k;
+
+    unsigned int mask = (1 << k) - 1;
+    auto result = n & mask;
+    cout << "lower " << k << " bits unchanged: " << bitset<32>(result) << endl;
+}
+
+/*  Sample execution:
+Enter an integer to extract from: 60000
+n = 60000 = 00000000000000001110101001100000
+Enter the number of lower bits: 10
+lower 10 bits unchanged: 00000000000000000000001001100000
+*/
+
+You can extract any contiguous sequence of bits from an integer my shifting the 
+ mask to the appropriate position, ANDing to extract the bits, and then shifting the results back so it is right aligned at position 0, giving the number the extracted bits represent.
+
+Suppose, for example, the you want to extract bits 5 through 11. Remember that bit position 11 is to the left of bit position 5. The number of bits to be extracted is 
+. The first step, therefore, is to create a mask with the lower 7 bits set:
+
+mask = (1 << 7) - 1 == 00000000000000000000000001111111
+Now shift to the left 5 positions so that the mask is right-aligned in bit position 5:
+
+mask <<= 5 == 00000000000000000000111111100000
+Then AND this mask with the number, getting a result of the following pattern:
+
+temp = n & mask == 00000000000000000000#######00000
+where the hash signs represent the bits extracted from the number. Finally, to get this result as a number in its own right, shift to the left 5 places to align over bit position 0:
+
+result = temp >> 5 == 0000000000000000000000000#######
+Not that it would be very readable, but you could extract bits 
+ through 
+ from the number n all at once as follows:
+
+(n & (((1 << (m-k+1)) - 1) << k)) >> k
+
+// Illustrate bitwise ops
+#include <iostream>
+using namespace std;
+
+int main() {
+    unsigned int n = 0x0a0b0c0d;    // = 0b0000'1010'0000'1011'0000'1100'0000'1101 = 1,684,961,410
+    cout << hex;
+
+    // Print each nybble left-to-right
+    unsigned int mask = 0xf0000000;
+    for (int i = 0; i < 8; ++i) {
+        auto bits = mask & n;
+        cout << (bits >> ((7-i)*4));   // 7-i = 8-(i+1), and there are 8 nibbles in a 32-bit int
+        mask >>= 4;
+    }
+    cout << endl;
+
+    // Print each bit left-to-right after flipping n's bits
+    mask = 0x80000000;
+    n = ~n;
+    for (int i = 0; i < 32; ++i) {
+        auto bits = mask & n;
+        cout << !!bits;     // The first ! gives 0 or 1, the second flips to 1 or 0
+        mask >>= 1;
+    }
+    cout << endl;
+}
+
+/* Output:
+0a0b0c0d
+11110101111101001111001111110010
+*/
+
+Desired Effect
+Code
+Test (read) the bit in position k	
+n & (1 << k)
+Set (to 1) the bit in position k	
+n |= (1 << k)
+Reset (to 0) the bit in position k	
+n &= ~(1 << k)
+Toggle (flip) the bit in position k	
+n ^= (1 << k)
+Extract the lower k bits as a new number	
+n & ((1 << k) - 1)
+Read the bits in positions k through m as a
+number	Get a mask with 
+ ones in its lower bits:
+unsigned int mask = (1 << (m-k+1)) - 1;
+Move the mask into position:
+mask <<= k;
+Do the AND:
+result = n & mask
+Right-align the result:
+result >>= k
+Same as above but all at once (not very readable)	
+(n & (((1 << (m-k+1)) - 1) << k)) >> k
+
+switch statements!!!
+
+//the expression (a) should be an int or a char 
+//ALWAYS have a default case 
+switch (a) {
+  case 0:
+     // Print "zero"
+     break;
+
+  case 1:
+     // Print "one"
+     break;
+
+  case 2:
+     // Print "two"
+     break;
+
+   default:
+     // Print "unknown"
+     break;
+}
+
+if statements:
+
+if (dogYears == 0) {           // Like case 0
+   // Print 0..14 years
+}
+else if (dogYears == 1) {      // Like case 1
+   // Print 15 years
+}
+...
+else if (dogYears == 5) {      // Like case 5
+   // Print 37 years 
+}
+else {                         // Like default case
+   // Print unknown
+}
+
+//falling through- if you don't put a break statement, the code will run the next case until it hits a break
+#include <iostream>
+using namespace std;
+
+int main() {
+   int dogAgeYears;
+   int dogAgeMonths;
+
+   cout << "Enter dog's age (in years): ";
+   cin >> dogAgeYears;
+
+   if (dogAgeYears == 0) {
+      cout << "Enter dog's age in months: ";
+      cin  >> dogAgeMonths;
+
+      switch (dogAgeMonths) {
+         case 0:
+         case 1:
+         case 2:
+            cout << "That's 0..14 human months." << endl;
+            break;
+
+         case 3:
+         case 4:
+         case 5:
+         case 6:
+            cout << "That's 1..5 human years." << endl;
+            break;
+
+         case 7:
+         case 8:
+            cout << "That's 5..9 human years." << endl;
+            break;
+
+         case 9:
+         case 10:
+         case 11:
+         case 12:
+            cout << "That's 9..15 human years." << endl;
+            break;
+
+         default:
+            cout << "Invalid input." << endl;
+            break;
+      }
+   }
+   else {
+      cout << "FIXME: Do earlier dog year cases." << endl;
+      switch (dogAgeYears) {
+      }
+   }
+
+   return 0;
+}
+
+Booleans!!
+a variable that is either set to true or false
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   int waitTime;
+   int partySize;
+   char day;
+   bool isLargeParty;
+   bool isWeekend;
+   
+   // Get day of reservation
+   cout << "Day of reservation (T/W/R/F/S/U): ";
+   cin >> day;
+   if (day == 'F' || day == 'S' || day == 'U') {
+      isWeekend = true;
+   }
+   else {
+      isWeekend = false;
+   }
+   
+   // Get party size
+   cout << "Enter party size: ";
+   cin  >> partySize;
+   isLargeParty = (partySize > 6);
+   
+   // Determine wait time based on day of week and party size
+   if (isWeekend && !isLargeParty) {
+      waitTime = 30;
+   }
+   else if (!isWeekend && !isLargeParty) {
+      waitTime = 10;
+   }
+   else if (isWeekend && isLargeParty) {
+      waitTime = 45;
+   }
+   else {
+      waitTime = 15;
+   }
+   
+   cout << "Restaurant wait time is " << waitTime
+        << " minutes." << endl;
+   
+   return 0;
+}
+
+string equality- if it's identical or not
+string relational comparisons- goes in alphabetical order, capitals first 
+    if the existing characters are equal, the smaller string is less than 
+
+indexing strings:
+cout << userWord[3]; //does not check the validity of the index 
+cout << userWord.at(3); //checks the validity, returns an error if not
+
+replace a character in a string:
+userWord.at(replaceIndex) = '*';
+
+s1.size() returns s1's length
+
+userCaption.append("."); //add to a string, must use a string value
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+   string userCaption;
+   char lastChar;
+   int lastIndex;
+
+   cout << "Enter a caption: ";
+   getline(cin, userCaption);
+
+   lastIndex = userCaption.size() - 1;
+   lastChar  = userCaption.at(lastIndex);
+
+   if ( (lastChar != '.') && (lastChar != '!') && (lastChar != '?') ) {
+      // User's caption lacked ending punctuation, so add a period
+      userCaption.append("."); //add to a string 
+   }
+
+   cout << "New: ";
+   cout << userCaption << endl;
+
+   return 0;
+}
+
+userText[7] = '!' may write to another variable's location and cause bizarre program behavior.
+
+One caveat with toupper and tolower: they return integers! It is crucial in Example 3.15.1 above that the result of toupper was stored in a char variable. Otherwise, it would have printed an integer value corresponding to the character. See below:
+
+string s = "David";
+
+// First attempt: print letters as upper case
+for (char c: s)
+    cout << toupper(c);
+cout << endl;
+
+// Fix: Cast to char
+for (char c: s)
+    cout << char(toupper(c));
+cout << endl;
+Output:
+
+6865867368
+DAVID
+
+#include <cctype> 
+
+isalpha(c)	true if alphabetic:
+a-z or A-Z	
+isalpha('x') // true
+isalpha('6') // false
+isalpha('!') // false
+
+toupper(c)	Uppercase version	
+letter = toupper('a')  // A
+letter = toupper('A')  // A
+letter = toupper('3')  // 3
+
+isdigit(c)	true if digit: 0-9.	
+isdigit('x') // false
+isdigit('6') // true
+
+tolower(c)	Lowercase version	// to upper and to lower do not modify the original value 
+letter = tolower('A')  // a
+letter = tolower('a')  // a
+letter = tolower('3')  // 3
+
+isspace(c)	true if whitespace.	
+isspace(' ')  // true
+isspace('\n') // true
+isspace('x')  // false
+
+find()	find(item) returns index of first item occurrence, else returns string::npos (a constant defined in the string library). Item may be char, string variable, string literal (or char array).
+
+find(item, indx) starts at index indx.	
+// userText is "Help me!"
+userText.find('p')    // Returns 3 
+userText.find('e')    // Returns 1 (first occurrence of e only) 
+userText.find('z')    // Returns string::npos 
+userText.find("me")   // Returns 5
+userText.find('e', 2) // Returns 6 (starts at index 2)
+substr()	substr(index, length) returns substring starting at index and having length characters.	
+// userText is "http://google.com"
+userText.substr(0, 7)                     // Returns "http://"
+userText.substr(13, 4)                    // Returns ".com"
+userText.substr(userText.size() - 4, 4)   // Last 4: ".com"
 
