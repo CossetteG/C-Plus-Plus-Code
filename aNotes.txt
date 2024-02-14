@@ -1127,14 +1127,138 @@ find()	find(item) returns index of first item occurrence, else returns string::n
 
 find(item, indx) starts at index indx.	
 // userText is "Help me!"
-userText.find('p')    // Returns 3 
-userText.find('e')    // Returns 1 (first occurrence of e only) 
-userText.find('z')    // Returns string::npos 
-userText.find("me")   // Returns 5
-userText.find('e', 2) // Returns 6 (starts at index 2)
+    userText.find('p')    // Returns 3 
+    userText.find('e')    // Returns 1 (first occurrence of e only) 
+    userText.find('z')    // Returns string::npos 
+    userText.find("me")   // Returns 5
+    userText.find('e', 2) // Returns 6 (starts at index 2)
+
 substr()	substr(index, length) returns substring starting at index and having length characters.	
-// userText is "http://google.com"
-userText.substr(0, 7)                     // Returns "http://"
-userText.substr(13, 4)                    // Returns ".com"
-userText.substr(userText.size() - 4, 4)   // Last 4: ".com"
+    // userText is "http://google.com"
+    userText.substr(0, 7)                     // Returns "http://"
+    userText.substr(13, 4)                    // Returns ".com"
+    userText.substr(userText.size() - 4, 4)   // Last 4: ".com"
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+   string emailText;
+   int atSymbolIndex;
+   string emailUsername;
+
+   cout << "Enter email address: ";
+   cin  >> emailText;
+
+   atSymbolIndex = emailText.find('@');
+   if (atSymbolIndex == string::npos) {
+      cout << "Address is missing @" << endl;
+   }
+   else {
+      emailUsername = emailText.substr(0, atSymbolIndex);
+      cout << "Username: " << emailUsername << endl;
+   }
+
+   return 0;
+}
+
+push_back()	push_back(c) appends character c to the end of a string.	
+    // userText is "Hello"
+    userText.push_back('?'); // Now "Hello?" 
+    userText.size();         // Returns 6
+
+insert()	insert(indx, subStr) Inserts string subStr starting at index indx.	
+    // userText is "Goodbye"
+    userText.insert(0, "Well "); // Now "Well Goodbye" 
+    // userText is "Goodbye"
+    userText.insert(4, "---");   // Now "Good---bye"
+
+replace()	replace(indx, num, subStr) replaces characters at indices indx to indx+num-1 with a copy of subStr.	
+    // userText is "You have many gifts"
+    userText.replace(9, 4, "a plethora of"); 
+    // Now "You have a plethora of gifts"
+
+str1 + str2
+    Returns a new string that is a copy of str1 with str2 appended.
+    If one of str1, str2 is a string, the other may be a character (or character array).	
+    // userText is "A B"
+    myString = userText + " C D";
+    // myString is "A B C D"
+    myString = myString + '!';
+    // myString now "A B C D!"
+    myString = myString + userText;
+    // myString now "A B C D!A B"
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+   string userName;
+   string greetingText;
+   int itemIndex;
+   
+   itemIndex = 0;
+   
+   cout << "Enter name: ";
+   getline(cin, userName);
+   
+   // Combine strings using +
+   greetingText = "Hello " + userName;
+   
+   // Append a period (could have used +)
+   greetingText.push_back('.'); // '' not ""
+   cout << greetingText << endl;
+   
+   // Insert Mr/Ms before user's name
+   greetingText.insert(6, "Mr/Ms ");
+   cout << greetingText << endl;
+   
+   // Replace occurrence of "Darn" by "@$#"
+   if (greetingText.find("Darn") != string::npos) { // Found
+      itemIndex = greetingText.find("Darn");
+      greetingText.replace(itemIndex, 4, "@#$");
+   }
+   cout << greetingText << endl;
+   
+   return 0;
+}
+
+An if-else statement can be written as a conditional expression.
+if (condition) {
+  myVar = expr1;
+}
+else {
+  myVar = expr2;
+}
+
+myVar = (condition) ? expr1 : expr2;
+A conditional expression has the form condition ? exprWhenTrue : exprWhenFalse.
+
+numMeters = 0.7;  
+numMeters = numMeters - 0.4;
+numMeters = numMeters - 0.3;
+       
+// numMeters expected to be 0, 
+// but is actually -0.0000000000000000555112 
+if (numMeters == 0.0) {
+   // Equals 0.
+}
+else {
+   // Does not equal 0.
+}
+Bug
+if (fabs(numMeters - 0.0) < 0.001) {
+   // Equals 0.
+}
+else {
+   // Does not equal 0.
+}
+      
+operand1 && operand2	true && operand2 	If the first operand evaluates to true, operand2 is evaluated.
+false && operand2	If the first operand evaluates to false, the result of the AND operation is always false, so operand2 is not evaluated.
+operand1 || operand2	true || operand2	If the first operand evaluates to true, the result of the OR operation is always true, so operand2 is not evaluated.
+false || operand2	If the first operand evaluates to false, operand2 is evaluated.
+
 
