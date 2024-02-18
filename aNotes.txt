@@ -1261,4 +1261,1017 @@ false && operand2	If the first operand evaluates to false, the result of the AND
 operand1 || operand2	true || operand2	If the first operand evaluates to true, the result of the OR operation is always true, so operand2 is not evaluated.
 false || operand2	If the first operand evaluates to false, operand2 is evaluated.
 
+range-based for loops
+
+When traversing a collection of some sort, like a string, an array, or vector, it is often more convenient to use the range-based for loop. The following example prints the individual characters of a string.
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "hello";
+    for (auto c: s)
+        cout << c << endl;
+}
+
+/* Output:
+h
+e
+l
+l
+o
+*/
+Since s is a string, the auto keyword causes c to be a char,
+ which is an individual element of a string. c is the loop variable, which takes on the value of 
+ each element of the target collection in turn. 
+We could have declared c to be a char, but using auto for traversing sequences is idiomatic in C++.
+
+for (initialExpression; conditionExpression; updateExpression) {
+  // Loop body
+}
+// Statements after the loop
+
+while loops
+
+int i;
+i = 0;
+while (i < 5) {
+    // Loop body
+    i = i + 1;
+}
+
+for loop key- standard way to loop N times
+
+int i;
+...
+for (i = 0; i < N; ++i) {
+   ...
+}
+
+++i, with ++ known as the increment operator. (Likewise, -- is the decrement operator,)
+
+Actually two increment operators exist: ++i (pre-increment) and i++ (post-increment). 
+++i increments before evaluating to a value, while i++ increments after. 
+Ex: If i is 5, outputting ++i outputs 6, while outputting i++ outputs 5 (and then i becomes 6). 
+This material primarily uses ++i for simplicity and safety, 
+although many programmers use i++, especially in for loops.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   double initialSavings;  // User-entered initial savings
+   double interestRate;    // Interest rate
+   double currSavings;     // Current savings with interest
+   int i;                  // Loop variable
+
+   cout << "Enter initial savings: ";
+   cin  >> initialSavings;
+
+   cout << "Enter interest rate: ";
+   cin  >> interestRate;
+
+   cout << endl << "Annual savings for 10 years: " << endl;
+
+   currSavings = initialSavings;
+   for (i = 0; i < 10; ++i) {
+      cout << "$" << currSavings << endl;
+      currSavings = currSavings + (currSavings * interestRate);
+   }
+
+   return 0;
+}
+
+for	Number of iterations is computable before the loop, like iterating N times.
+while	Number of iterations is not (easily) computable before the loop, 
+like iterating until the input is 'q'.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   int numInput;
+   int value;
+   int i;
+
+   cin >> numInput;
+
+   for (i=0; i < numInput; ++i) {
+         cin >> value;
+         cout << "Read = " << value << endl;
+   }
+   
+   return 0;
+}
+
+
+#include <iostream>
+using namespace std;
+
+// Outputs max of list of integers
+// First value indicates list size
+// Ex: 4 -1 9 0 3  yields 9
+
+int main() {
+   int maxSoFar;
+   int currValue;
+   int numValues;
+   int i;
+   
+   cin >> numValues;
+   
+   for (i = 0; i < numValues; ++i) {
+      cin >> currValue;
+      
+      if (i == 0) { // First iteration
+         maxSoFar = currValue;
+      }
+      else if (currValue > maxSoFar) {
+         maxSoFar = currValue;
+      }
+   }
+   
+   if (numValues > 0) {
+      cout << "Max: " << maxSoFar << endl;
+   }
+   
+   return 0;
+}
+
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   int currC;
+   double equivalentF;
+   
+   for (currC = -10; currC <= 40; currC += 5) {
+      equivalentF =  (currC * 9.0 / 5.0) + 32.0;
+
+      cout << currC << " C is ";
+      cout << equivalentF << " F";
+      cout << endl;
+   }
+   
+   return 0;
+}
+
+Loops and strings
+iterate through a string using a loop
+
+for (char c: inputWord)
+    if (isalpha(c))
+        ++numLetters;
+
+find/replace in a string:
+ isdigit()- checks if a char is a number
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+   string userText;
+   int usaIndex;
+
+   cout << "Enter text: ";
+   getline(cin, userText);
+
+   // At least one occurrence exists
+   while (userText.find("U.S.A.") != string::npos) {
+      // Get index of first instance
+      usaIndex = userText.find("U.S.A.");
+
+      // U.S.A. is 6 long
+      userText.replace(usaIndex, 6, "USA");
+   }
+
+   cout << "New text: " << userText<< endl;
+
+   return 0;
+}
+
+A nested loop is a loop that appears in the body of another loop. 
+The nested loops are commonly referred to as the inner loop and outer loop.
+
+Nested loops have various uses. One use is to generate all combinations of some items. 
+For example, the following program generates all two-letter .com Internet domain names
+
+#include <iostream>
+using namespace std;
+
+/* Output all two-letter .com Internet domain names */
+
+int main() {
+   char letter1;
+   char letter2;
+   
+   cout << "Two-letter domain names:" << endl;
+   
+   letter1 = 'a';
+   while (letter1 <= 'z') {
+      letter2 = 'a';
+      while (letter2 <= 'z') {
+         cout << letter1 << letter2 << ".com" << endl;
+         ++letter2;
+      }
+      ++letter1;
+   }
+   
+   return 0;
+}
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   int numAsterisk;  // Number of asterisks to print
+   int i;            // Loop counter
+   
+   numAsterisk = 0;
+
+   while (numAsterisk >= 0) {
+      cout << "Enter an integer (negative to quit): ";
+      cin >> numAsterisk;
+      
+      if (numAsterisk >= 0) {
+         cout << "Depicted graphically:" << endl;
+         for (i = 1; i <= numAsterisk; ++i) {
+            cout << "*";
+         }
+         cout << endl << endl;
+      }
+   }
+   
+   cout << "Goodbye." << endl;
+
+   return 0;
+}
+
+do-while loops 
+does the thing, then checks the condition before repeating
+so it will always run at lease once
+
+do {
+   // Loop body
+} while (loopExpression);
+
+break and continue 
+break immediatly throws you out of the loop
+continue statements jump to the next iteration
+^ can be used to replace nesting
+
+for (numTacos = 0; numTacos <= maxTacos; ++numTacos) {
+      for (numEmpanadas = 0; numEmpanadas <= maxEmpanadas; ++numEmpanadas) {
+         
+         mealCost = (numEmpanadas * EMPANADA_COST) + (numTacos * TACO_COST);
+         
+         // Find first meal option that exactly matches user money
+         if (mealCost == userMoney) {
+            break;
+         }
+      }
+      
+      // If meal option exactly matching user money is found, 
+      // break from outer loop as well
+      if (mealCost == userMoney) {
+         break;
+      }
+   }
+
+   for (numTacos = 0; numTacos <= maxTacos; ++numTacos) {
+      for (numEmpanadas = 0; numEmpanadas <= maxEmpanadas; ++numEmpanadas) {
+         
+         // Total items purchased must be equally 
+         // divisible by number of diners
+         if ( ((numTacos + numEmpanadas) % numDiners) != 0) {
+            continue;
+         }
+         
+         mealCost = (numEmpanadas * EMPANADA_COST) + (numTacos * TACO_COST);
+         
+         if (mealCost == userMoney) {
+            cout << "$" << mealCost << " buys " << numEmpanadas
+                 << " empanadas and " << numTacos 
+                 << " tacos without change." << endl;
+            numOptions = numOptions + 1;
+         }
+      }
+   }
+
+Variable name scope:
+any variable's scope starts where it is declared and ends at the end of the block its declared in 
+
+Enumerations
+enumerations are a variable that have a set of specific possible values 
+enum TvChannels {TC_CBS = 2, TC_NBC = 5, TC_ABC = 7};
+
+int main() {
+   enum LightState {LS_RED, LS_GREEN, LS_YELLOW, LS_DONE};
+   LightState lightVal;
+   char userCmd;
+
+   lightVal = LS_RED;
+   userCmd = '-';
+
+   cout << "User commands: n (next), r (red), q (quit)." << endl  
+}
+
+The example illustrates the idea of a state machine that is sometimes used in programs, 
+especially programs that interact with physical objects, 
+wherein the program moves among particular situations ("states") depending on input;
+
+They're safer than just using strings because they will throw an error at invalid input 
+
+The Indexing Operator
+You can also use the indexing operator (square brackets) to access or change a vector element. The following are (almost) equivalent:
+
+itemCounts.at(0) = 122;
+itemCounts[0] = 122;
+The difference between the two is that the at member function will cause an error if the 
+index is out of range of the actual data in the vector. 
+The indexing operator does no such checking, so it is faster.
+
+Vectors
+
+vector<dataType> vectorName(numElements); 
+
+{ } are braces. < > are angle brackets, or chevrons. In a vector access, 
+the number in .at() parentheses is called the index of the corresponding element. 
+The first vector element is at index 0.
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> itemCounts(3);
+
+    itemCounts.at(0) = 122;
+    itemCounts.at(1) = 119;
+    itemCounts.at(2) = 117;
+
+    cout << itemCounts.at(1);
+
+    return 0;
+}
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+   vector<int> oldestPeople(5);  
+   int nthPerson;               // User input, Nth oldest person
+
+   oldestPeople.at(0) = 122; // Died 1997 in France
+   oldestPeople.at(1) = 119; // Died 1999 in U.S.
+   oldestPeople.at(2) = 117; // Died 1993 in U.S. 
+   oldestPeople.at(3) = 117; // Died 1998 in Canada
+   oldestPeople.at(4) = 116; // Died 2006 in Ecuador
+
+   cout << "Enter N (1..5): ";
+   cin  >> nthPerson;
+
+   if ((nthPerson >= 1) && (nthPerson <= 5)) {
+      cout << "The #" << nthPerson << " oldest person lived ";
+      cout << oldestPeople.at(nthPerson - 1) << " years." << endl;
+   }
+
+   return 0;
+}
+
+A vector's size() function returns the number of vector elements. 
+Ex: In the program below, userVals.size() is 8 because the vector was declared with 8 elements.
+
+All of a vector's elements may be initialized to another single value. 
+Ex: vector<int> myVector(3, -1); creates a vector named myVector with three elements, 
+each with value -1.
+
+A programmer may initialize each vector element with different values by specifying the 
+initial values in braces {} separated by commas. Ex: vector<int> carSales = {5, 7, 11}; 
+creates a vector of three integer elements initialized with values 5, 7, and 11. 
+Such vector declaration and initialization does not require specifying the vector size, 
+because the vector's size is automatically set to the number of elements within the braces. 
+
+For a larger vector, initialization may be done by first declaring the vector, 
+and then using a loop to assign vector elements.
+
+testfile.cpp:12: error: ISO C++ forbids declaration of vector with no type
+testfile.cpp:12: error: expected ; before < token
+^this is the error if you forget to #include <vector>
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+   const int NUM_VALS = 8;         // Number of elements in vector
+   vector<int> userVals(NUM_VALS); // User values
+   unsigned int i;                 // Loop index
+   
+   cout << "Enter " << NUM_VALS << " integer values..." << endl;
+   for (i = 0; i < userVals.size(); ++i) {
+      cout << "Value: ";
+      cin >> userVals.at(i);
+   }
+   
+   cout << "You entered: ";
+   for (i = 0; i < userVals.size(); ++i) {
+      cout << userVals.at(i) << " ";
+   }
+   cout << endl;
+   
+   return 0;
+}
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+   const int NUM_ELEMENTS = 3;
+   vector<int> userVals(NUM_ELEMENTS);
+   unsigned int i;
+
+   userVals.at(0) = 3;
+   userVals.at(1) = 6;
+   userVals.at(2) = 7;
+
+   for (i = 0; i < userVals.size(); ++i) {
+      cout << userVals.at(i) << endl;
+   }
+
+   return 0;
+}
+
+range based for loop with vectors (and arrays)
+
+vector<int> v = {1,2,3,4,5};
+    for (auto n: v)
+        cout << n << endl; 
+
+// Iterating through myVector
+for (i = 0; i < myVector.size(); ++i) {
+   // Loop body accessing myVector.at(i)
+}
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+   const int NUM_ELEMENTS = 8;         // Number of elements in vector
+   vector<int> userVals(NUM_ELEMENTS); // User values
+   unsigned int i;                     // Loop index
+   int sumVal;                         // For computing sum
+   
+   cout << "Enter " << NUM_ELEMENTS << " integer values..." << endl;
+   for (i = 0; i < userVals.size(); ++i) {
+      cout << "Value: ";
+      cin >> userVals.at(i);
+      cout << endl;
+   }
+   
+   // Determine sum
+   sumVal = 0;
+   for (i = 0; i < userVals.size(); ++i) {
+      sumVal = sumVal + userVals.at(i);
+   }
+   cout << "Sum: " << sumVal << endl;
+   
+   return 0;
+}
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+   const int NUM_VALS = 8;         // Number of elements in vector
+   vector<int> userVals(NUM_VALS); // User values
+   unsigned int i;                 // Loop index
+   int maxVal;                     // Computed max
+   
+   cout << "Enter " << NUM_VALS << " integer values..." << endl;
+   for (i = 0; i < userVals.size(); ++i) {
+      cout << "Value: ";
+      cin >> userVals.at(i);
+   }
+   
+   // Determine largest (max) number
+   maxVal = userVals.at(0);        // Largest so far
+   for (i = 0; i < userVals.size(); ++i) {
+      if (userVals.at(i) > maxVal) {
+         maxVal = userVals.at(i);
+      }
+   }
+   cout << "Max: " << maxVal << endl;
+   
+   return 0;
+}
+
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  vector::_M_range_check
+Abort
+^error message when you try to access an index that is out of range 
+
+use parallel vectors to pair values together/ do other fun stuff / replace dictionaries
+
+vector resize:
+grow vector 
+v.resize(int);
+
+When growing a vector, the new elements are default-initialized:
+
+    vector<int> v = {1,2,3,4,5};
+    v.resize(10);
+    for (auto n: v)
+        cout << n << endl;
+Output:
+1
+2
+3
+4
+5
+0
+0
+0
+0
+0
+
+resize() can be called multiple times. If the new size is larger, 
+resize() adds elements at the end. If smaller, resize() deletes elements from the end. 
+
+A programmer can append a new element to the end of an existing vector using a vector's 
+push_back() function. Ex: dailySales.push_back(521) creates a new element at the end of the 
+vector dailySales and assigns that element with the value 521
+^like the opposite of the pop function 
+
+push_back()   	void push_back(const int newVal);     Append new element having value newVal.
+                playersList.push_back(77);
+back()	        int back();               Returns vector's last element. Vector is unchanged.
+                cout << playersList.back();
+pop_back()	    void pop_back();                                    Removes the last element.
+                playersList.pop_back();
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+   vector<string> groceryList; // Vector storing shopping list
+   string groceryItem;         // Individual grocery items
+   string userCmd;             // User input
+   
+   // Prompt user to populate shopping list
+   cout << "Enter grocery items or type done." << endl;
+   cin >> groceryItem;
+   while (groceryItem != "done") {
+      groceryList.push_back(groceryItem);
+      cin >> groceryItem;
+   }
+   
+   // Display shopping list
+   cout << endl << "Enter any key for next item." << endl;
+   while (groceryList.size() > 0) {
+      groceryItem = groceryList.back();
+      groceryList.pop_back();
+      cout << groceryItem << "   ";
+      cin >> userCmd;
+   }
+   cout << endl << "Done shopping." << endl;
+   
+   return 0;
+}
+
+You can also use a range-based for loop to modify vector elements 
+if you make the loop variable a reference (with &):
+
+    vector<int> v = {1,2,3,4,5};
+    for (auto& n: v)   // Note the & (meaning n refers to the memory location of each element)
+        n += 2;
+    for (auto n: v)
+        cout << n << endl;
+Output:
+3
+4
+5
+6
+7
+
+   // Convert negatives to 0
+   for (i = 0; i < userVals.size(); ++i) {
+      if (userVals.at(i) < 0) {
+         userVals.at(i) = 0;
+      }
+   }
+
+SWAPPING SWAPPY NOODLES 
+switching two values, trading
+The swap algorithm
+If you #include <algorithm>, you can use the swap function:
+
+    int x = 1, y = 2;
+    swap(x,y);
+    cout << x << ", " << y << endl;
+Output:
+2, 1
+The arguments to swap must refer to non-const memory.
+
+A common method for swapping uses a temporary variable. 
+A temporary variable is a variable used briefly to store a value.
+
+You can also swap vector values
+swap(revVctr.at(i), revVctr.at(revVctr.size() - 1 - i))
+
+// Reverse
+   for (i = 0; i < revVctr.size(); ++i) {
+      revVctr.at(i) = revVctr.at(revVctr.size() - i); // Swap
+   }
+
+Arrays :D 
+like vectors but built in so theyre less cool 
+(lists)
+
+dataType arrayName[numElements]; 
+[ ] are brackets. { } are braces. In an array access, the number in brackets is called the 
+index of the corresponding element. The first array element is at index 0.
+
+userNums[i] uses the value held in the int variable i as the index. As such, an array is 
+useful to easily lookup the Nth item in a list.
+An array's index must be an integer type. The array index cannot be a floating-point type, 
+even if the value is 0.0, 1.0, etc.
+
+loops and arrays 
+you can iterate through arrays 
+#include <iostream>
+using namespace std;
+
+int main() {
+   const int NUM_ELEMENTS = 8;  // Number of elements in array
+   int userVals[NUM_ELEMENTS];  // User numbers
+   int i;                   // Loop index
+   
+   cout << "Enter " << NUM_ELEMENTS << " integer values..." << endl;
+   for (i = 0; i < NUM_ELEMENTS; ++i) {
+      cout << "Value: ";
+      cin >> userVals[i];
+   }
+   
+   cout << "You entered: ";
+   for (i = 0; i < NUM_ELEMENTS; ++i) {
+      cout << userVals[i] << " ";
+   }
+   cout << endl;
+   
+   return 0;
+}
+
+An array's elements are not automatically initialized during the variable declaration and 
+should be initialized before being read. A programmer may initialize an array's elements in 
+an array variable declaration by specifying the initial values in braces {} separated by commas.
+ Ex: int myArray[3] = {5, 7, 11}; initializes element at index 0 with 5, element at index 1 with
+  7, and element at index 2 with 11. For larger arrays, a loop may be used for initialization.
+
+Like other variables, the keyword const may be prepended to an array variable declaration to 
+prevent changes to the array. Thus, const int YEARS[3] = {1865, 1920, 1964}; followed by 
+YEARS[0] = 2000; yields a compiler error.
+
+You can also iterate through an array with the range-based for loop, as shown below.
+
+for (auto n: someArray)
+    cout << n << endl;
+//This is only valid within the scope of the definition of the array; 
+//When you pass an array to a function, this does not work.
+
+// Iterating through myArray
+for (i = 0; i < numElements; ++i) {
+   // Loop body accessing myArray[i]
+}
+
+A write to an array with an out-of-range index may simply write to a memory location of a 
+different variable X residing next to the array in memory. Later, when the program tries to 
+read X, the program encounters incorrect data. For example, a program may write X with the 
+number 44, but when reading X later in the program X may be 2533, with X never (intentionally)
+ written by any program statement in between.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   const int NUM_ELEMENTS = 8; // Number of elements
+   int userVals[NUM_ELEMENTS]; // User numbers
+   int i;                      // Loop index
+   int sumVal;                 // For computing sum
+   
+   // Prompt user to populate array
+   cout << "Enter " << NUM_ELEMENTS << " integer values..." << endl;
+   
+   for (i = 0; i < NUM_ELEMENTS; ++i) {
+      cout << "Value: ";
+      cin >> userVals[i];
+   }
+   
+   // Determine sum
+   sumVal = 0;
+   for (i = 0; i < NUM_ELEMENTS; ++i) {
+      sumVal = sumVal + userVals[i];
+   }
+   
+   cout << "Sum: " << sumVal << endl;
+   
+   return 0;
+}
+
+Programmers commonly use multiple same-sized arrays to store related lists.
+
+#include <iostream>
+using namespace std;
+
+int main () {
+   const int NUM_ELEMENTS = 14;
+   // Weights in ounces
+   double letterWeights[NUM_ELEMENTS] = {1.0, 2.0, 3.0, 3.5, 4.0, 5.0, 6.0,
+                                         7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0};
+   // Costs in cents (usps.com 2017)
+   int postageCosts[NUM_ELEMENTS] = {49, 70, 91, 112, 161, 182, 203,
+                                     224, 245, 266, 287, 308, 329, 350};
+   double userLetterWeight;
+   bool foundWeight;
+   int i;
+   
+   // Prompt user to enter letter weight
+   cout << "Enter letter weight (in ounces): ";
+   cin >> userLetterWeight;
+   
+   // Postage costs is based on smallest letter weight greater than
+   // or equal to mailing letter weight
+   foundWeight = false;
+   
+   for (i = 0; (i < NUM_ELEMENTS) && (!foundWeight); ++i) {
+      if (userLetterWeight <= letterWeights[i]) {
+         foundWeight = true;
+         cout << "Postage for USPS first class mail is ";
+         cout << postageCosts[i] << " cents" << endl;
+      }
+   }
+   
+   if( !foundWeight ) {
+      cout << "Letter is too heavy for USPS first class mail." << endl;
+   }
+   
+   return 0;
+}
+
+------------modifying/copying /changing/swapping/ reading arrays
+
+// Convert negatives to 0
+for (auto& n: userVals) // Note the &
+    if (n < 0)
+        n = 0;
+
+// Convert negatives to 0
+   for (i = 0; i < NUM_ELEMENTS; ++i) {
+      if (userVals[i] < 0) {
+         userVals[i] = 0;
+      }
+   }
+
+for (i = 0; i < NUM_ELEMENTS; ++i) {
+      copiedVals[i] =  userVals[i];
+   }
+
+swap(userVals[I], userVals[NUM_ELEMENTS - 1 - i]);
+
+for (i = 0; i < (NUM_ELEMENTS / 2); ++i) {
+      tempVal = userVals[i];                        // Temp for swap
+      userVals[i] = userVals[NUM_ELEMENTS - 1 - i]; // First part of swap
+      userVals[NUM_ELEMENTS - 1 - i] = tempVal;     // Second complete
+   }
+
+2d Arrays/ 2d Lists
+
+An array can be declared with two dimensions. int myArray[R][C] represents a table 
+of int variables with R rows and C columns, so R*C elements total. For example, 
+int myArray[2][3] creates a table with 2 rows and 3 columns, for 6 int variables total. 
+Example accesses are myArray[0][0] = 33; or num = myArray[1][2].
+
+initializing 2d arrays:
+// Initializing a 2D array
+int numVals[2][3] = { {22, 44, 66}, {97, 98, 99} };
+
+// Use multiple lines to make rows more visible
+int numVals[2][3] = {
+   {22, 44, 66}, // Row 0
+   {97, 98, 99}  // Row 1
+};
+
+or you can do it the hard way:
+   int drivingDistances[3][3]; // Driving distances
+
+   // Initialize distances array
+   drivingDistances[0][0] = 0;
+   drivingDistances[0][1] = 960;  // Boston-Chicago
+   drivingDistances[0][2] = 2960; // Boston-Los Angeles
+   drivingDistances[1][0] = 960;  // Chicago-Boston
+   drivingDistances[1][1] = 0;
+   drivingDistances[1][2] = 2011; // Chicago-Los Angeles
+   drivingDistances[2][0] = 2960; // Los Angeles-Boston
+   drivingDistances[2][1] = 2011; // Los Angeles-Chicago
+   drivingDistances[2][2] = 0;
+
+Arrays of three or more dimensions can also be declared, as in int myArray[2][3][5] 
+
+    FYI -- How vectors really work under the hood
+    Arrays are built into the C++ language, whereas vector is implemented in C++ code and provided in the <vector> header. Vectors are actually implemented internally by using arrays with the following procedure:
+
+    Define an array with some default size (depends on who wrote the C++ compiler)
+    When the user wants to add an element at the end of the vector:
+    Check if there is an empty space in the currently allocated underlying array
+    If there isn't a space, then reallocate a new, bigger array, and copy the elements in use to it; then delete the old array
+    Add the element in the first free space at the end of the array
+
+C++ supports two kinds of ordered list types:
+
+Arrays: declared as int myList[10], accessed as myList[i].
+Vectors: declared as vector<int> myList(10), accessed as myList.at(i).
+Arrays have a simpler syntax than vectors, but vectors are safer to use. 
+Thus, using vectors rather than arrays is good practice.
+
+Vectors are safer because the access v.at(i) is checked during execution to ensure the index 
+is within the vector's valid range. An array access a[i] involves no such check. 
+Such checking is important; trying to access an array with an out-of-range index is a very 
+common error, and one of the hardest errors to debug.
+
+Char Arrays/ C Strings 
+
+A programmer can use an array to store a sequence of characters, known as a string. 
+char movieTitle[20] = "Star Wars";. Because a string can be shorter than the character array, 
+a string in a char array must end with a special character known as a null character, 
+written as '\0'. Given a string literal like "Star Wars", the compiler automatically appends 
+a null character.
+
+If a char array is initialized when declared, then the char array's size may be omitted, 
+as in char userName[] = "Hellen"; . The compiler determines the size from the string literal, 
+in this case 6 + 1 (for the null character), or 7.
+
+An array of characters ending with a null character is known as a null-terminated string.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   char cityName[20] = "Forest Lake"; // Compiler appends null char
+
+   // In each cout, printing stops when reaching null char
+   cout << "City:" << endl;           // Compiler appends null char to "City:"
+   cout << cityName << endl; 
+
+   return 0;
+}
+
+after a cstring is declared, you can't just reassign it as in movieTitle = "Indiana Jones";. 
+That statement tries to assign a value to the char array variable itself, 
+rather than copying each character from the string on the right into the array on the left.
+
+  // The following is an ERROR.
+   // May print chars it shouldn't.
+   // Problem: doesn't stop at null char.
+   cout << "\""; // Print opening "
+   for (i = 0; i < 20; ++i) { // Print each char
+      cout << userStr[i];
+   }
+   cout << "\"" << endl;      // Print closing "
+   
+   
+   // The following is an even WORSE ERROR.
+   // Accesses beyond valid index range.
+   // Program may crash.
+   cout << "\""; // Print opening "
+   for (i = 0; i < 30; ++i) {
+      cout << userStr[i];
+   }
+   cout << "\"" << endl; // Print closing "
+   
+#include <iostream>
+using namespace std;
+
+int main() {
+   char userStr[10]; // Input string
+   int i;
+   
+   // Prompt user for string input
+   cout << "Enter string (<10 chars): ";
+   cin >> userStr;
+   
+   // Print 1 char at a time
+   cout << endl;
+   for (i = 0; userStr[i] != '\0'; ++i) {
+      cout << userStr[i] << endl;
+   }
+   cout << endl;
+   
+   return 0;
+}
+
+#include <iostream>
+using namespace std;
+
+int main() {
+   char nameArr[5];
+
+   nameArr[0] = 'A';
+   nameArr[1] = 'l';
+   nameArr[2] = 'a';
+   nameArr[3] = 'n';
+   nameArr[4] = '\0'; // Null character
+
+   cout << nameArr << endl;
+
+   nameArr[4] = '!';         // Oops, overwrote null char
+   cout << nameArr << endl; // *Might* still work
+
+   return 0;
+}
+
+C++ provides functions for working with C strings, presented in the cstring library. 
+To use those functions, the programmer starts with: #include <cstring>.
+
+C String Functions:
+
+strcpy()	strcpy(destStr, sourceStr)  Copies sourceStr (up to and including null character) 
+                                        to destStr.
+
+strncpy()	strncpy(destStr, sourceStr, numChars)  Copies up to numChars characters.
+
+strcat()	strcat(destStr, sourceStr) Copies sourceStr (up to and including null character) 
+                                    to end of destStr (starting at destStr's null character).
+
+strncat()	strncat(destStr, sourceStr, numChars)  Copies up to numChars characters 
+                                                to destStr's end, then appends null character.
+
+strchr()	strchr(sourceStr, searchChar) Returns NULL if searchChar does not exist in sourceStr.
+                                        (Else, returns address of first occurrence, discussed 
+                                        elsewhere).
+                                        NULL is defined in the cstring library.
+
+strlen()	size_t strlen(sourceStr)  Returns number of characters in sourceStr up to, but not 
+                                        including, first null character. size_t is integer type.
+
+strcmp()	int strcmp(str1, str2) Returns 0 if str1 and str2 are equal, non-zero if they differ.
+
+Character: check if a character is x thing: 
+#include <cctype> 
+(some of this info can be found above)
+
+isalpha(c) -- Returns true if c is alphabetic: a-z or A-Z.
+isdigit(c) -- Returns true if c is a numeric digit: 0-9.
+isalnum(c) -- Returns true if c is alphabetic or a numeric digit. 
+isspace(c) -- Returns true if character c is a whitespace.
+islower(c) -- Returns true if character c is a lowercase letter a-z.
+isupper(c) -- Returns true if character c is an uppercase letter A-Z.
+isblank(c) -- Returns true if character c is a blank character, include spaces and tabs.
+isxdigit(c) -- Returns true if c is a hexadecimal digit: 0-9, a-f, A-F.
+ispunct(c) -- Returns true if c is a punctuation character !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+isprint(c) -- Returns true if c is a printable character: alphanumeric, punctuation, and space.
+iscntrl(c) -- Returns true if c is a control character: are all characters that are not printable.
+
+Character conversions:
+
+toupper(c) -- If c is a lowercase alphabetic character (a-z), returns the uppercase version (A-Z).
+              If c is not a lowercase alphabetic character, just returns c.
+
+tolower(c) -- If c is an uppercase alphabetic character (A-Z), returns the lowercase version (a-z). 
+                If c is not an uppercase alphabetic character, just returns c.
+
+stoi(s)	Converts the string s to an int
+stof(s)	Converts the string s to an float
+stod(s)	Converts the string s to an double
+
+
+There are times when you want a quoted string literal to be interpreted as a 
+std::string instead of a char array. 
+To do this, #include the <string> header and place an s after the string literal:
+
+#include <iostream>
+#include <string>
+#include <typeinfo>
+using namespace std;
+
+int main() {
+    auto s1 = "Hello";
+    cout << s1 << " is a " << typeid(s1).name() << endl;
+    auto s2 = "Goodbye"s;
+    cout << s2 << " is a " << typeid(s2).name() << endl; //notice how i get the type 
+}
+
+/* Output from Visual Studio:
+Hello is a char const *
+Goodbye is a class std::basic_string<char,struct std::char_traits<char>,
+class std::allocator<char> >
+*/
 
