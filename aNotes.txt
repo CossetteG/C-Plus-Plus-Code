@@ -1123,7 +1123,9 @@ isspace(' ')  // true
 isspace('\n') // true
 isspace('x')  // false
 
-find()	find(item) returns index of first item occurrence, else returns string::npos (a constant defined in the string library). Item may be char, string variable, string literal (or char array).
+find()	find(item) returns index of first item occurrence, 
+else returns string::npos (a constant defined in the string library). 
+Item may be char, string variable, string literal (or char array).
 
 find(item, indx) starts at index indx.	
 // userText is "Help me!"
@@ -2274,4 +2276,291 @@ Hello is a char const *
 Goodbye is a class std::basic_string<char,struct std::char_traits<char>,
 class std::allocator<char> >
 */
+
+principle- parts of an object must be initialized begore assembling the whole object
+if you have datat members of some class type, they will automatically be initialized by their default constructor
+if you want to send initial data to the data members constructor, a special operation is necessary 
+
+
+you can intitialize with a default initializer, and have a second initializer that takes in arguments
+or insert code after a : with initialization lists 
+
+you should always use constuctor initializer lists for data members of class type that you
+ want initialized with arguments
+member objects are always default initialized
+member objects requiring constructor argumetns should always appear in the initializer list 
+and not the constuctor body
+
+8.12 in class 
+
+Lecture::Lecture() : status(Unavailable), amount(100), whatevs(-) {}
+
+you can initialize non static data members as they are defined in situ 
+ the code executes before any constructor 
+
+struct Part {
+   int n = 0;
+   Part() {
+      cout << "constructor";
+   }
+}
+
+Deconstructors- called at the end of the life of an object 
+the opposite of initializing 
+start with ~ 
+always has no parameters and no return 
+
+~Employee () {}
+
+the default constuctor is used to initialze all array objects- there must be one 
+elements are destroyed in revers order when an element goes out of scope 
+
+an array is a pointer to the first object in the array 
+uml- unified modifying language -a way to diagram code before you write it 
+
+class vs struct 
+no setters- private vs setters public 
+
+Unit testing
+A unit test is typically conducted by creating a testbench, a.k.a. test harness, which is a 
+separate program whose sole purpose is to check that a function returns correct output values 
+for a variety of input values. Each unique set of input values is known as a test vector.
+
+   cout << "Testing started" << endl;
+   
+   assert(HrMinToMin(0, 0)  == 0);
+   assert(HrMinToMin(0, 1)  == 1);
+   assert(HrMinToMin(0, 99) == 99);
+   assert(HrMinToMin(1, 0)  == 60);
+   assert(HrMinToMin(5, 0)  == 300);
+   assert(HrMinToMin(2, 30) == 150);
+   // Many more test vectors would be typical...
+   
+   cout << "Testing completed" << endl;
+
+using an if statement:
+if ( HrMinToMin(0, 0) != 0 ) {
+   cout << "0:0, expecting 0, got: " << HrMinToMin(0, 0) << endl;
+}
+
+Good test vectors also include border cases 
+
+A pass by reference parameter does not create a local copy of the argument, 
+but rather the parameter refers directly to the argument variable's memory location. 
+Appending & to a parameter's data type makes the parameter pass by reference type.
+
+pass all built-in types by value (things you don't need an #include for, like int, double, char, bool)
+pass everything else by reference, like string, vector, etc. (by const reference if the function 
+shouldn't change the argument passed, which is most of the time)
+
+const can be prepended to a function's vector or string parameter to prevent the function from 
+modifying the parameter.
+
+. A function declaration specifies the function's return type, name, and parameters, ending with 
+a semicolon where the opening brace would have gone. A function declaration is also known as a 
+function prototype.
+
+A function can have a default parameter value for the last parameter(s)
+void PrintDate(int currDay, int currMonth, int currYear, int printStyle = 0)
+
+Sometimes a program has two functions with the same name but differing in the number or types of
+parameters, known as function name overloading or just function overloading. The following two
+functions print a date given the day, month, and year. The first function has parameters of 
+type int, int, and int, while the second has parameters of type int, string, and int.
+The compiler determines which function to call based on the argument types.
+
+  void PrintDate(int currDay, int currMonth, int currYear) {
+   cout << currMonth << "/" << currDay << "/" << currYear;
+}
+
+void PrintDate(int currDay, string currMonth, int currYear) {
+   cout << currMonth << " " << currDay << ", " << currYear;
+}
+
+int main() {
+   
+   PrintDate(30, 7, 2012);
+   cout << endl;
+   
+   PrintDate(30, "July", 2012);
+   cout << endl;
+   
+   return 0;
+}
+
+preprocessor is a tool that scans the file from top to bottom 
+ looking for any lines that begin with #
+ such line being known as a preprocessor directive
+ #include, known as an include directive. 
+ include directs the compiler to replace that line by the contents of the given filename
+ #include "myfile.h" causes the preprocessor to look for the file in the same folder/directory
+ #include <stdfile> causes the preprocessor to look in the system's standard library
+
+ Separating part of a program's code into a separate file can yield several benefits.
+ One benefit is preventing a main file from becoming unmanageably large. 
+ Another benefit is that the separated part could be useful in other programs.
+ Use prototype function declarations to declare functions when theyre in another file
+
+header files- #include "threeintsfcts.h".
+
+#ifndef FILENAME_H
+#define FILENAME_H
+
+// Header file contents
+
+#endif
+
+constant member functions- a function that won't change its value 
+double Point::get_x() const {
+   return x;
+}
+basically don't use const if you're updating or changing things 
+
+header files usually end in .h
+use header files to put functions and stuff that is used across different files 
+
+the compiler makes 4 magical things for you (usually)
+default constructor
+   Point() = default;
+copy constructor
+   copies all members from an existing object to the new one
+   created automatically unless you provide your own (override)
+copy-assignment operator
+   assigns all members from one existing object to another existing obecet-
+   overwrite the existing object
+   unless you create your own 
+   MyClass& operator=(const MyClass& other)
+destructor 
+
+Header files dont always have all the needed code- its the blueprint
+speeds up compilation time 
+
+set fire off multiple files:
+g++ -std=c++17 -o tpoint3 tpoint3.cpp tpoint2 tpoint2.cpp 
+
+in header files:
+   dont use using namespace std, use the std:: or using std::vector 
+   dont define function bodies/ global data unless you declare them inline
+   minimize names global namespace 
+
+Operator overloading
+use operator<opr> syntax:
+operator*, operator<, operator==, operator<<
+dont mess with binary operators, use Decimal
+
+Fraction Fraction operator+(const Fraction& rhs) const {
+   int new_num = num + rhs.num;
+   return new_num;
+}
+
+Friend Functions 
+Sometime functions can't be member functions 
+stream output operator << and >>
+^they can be chained
+^they still belong to the abstract data type - its a language technicality 
+^So, we make them friends- regular functions that have private access
+
+Implicit Conversions 
+a feature of constructors that can be called wiith a single argument
+allows miced-mode operations, like f1 + 1 
+but 1 + f1 will not compile 
+the object on the left should be more specific (invoke a member function)
+so, we make it a friend function 
+
+friend Fraction operator+(const Fraction& lhs, const Fraction& rhs) const {
+   int newnum = num.lhs*rhs.den + rhs.num*den;
+   int new_den = den*rhs.den;
+   return
+}
+
+frind ostream& operator <<(ostream& os, const Fraction & f) {
+   os << f.num << '/' << f.den;
+}
+
+namespaces- a way of packaging names together 
+can be the names of variables, functions, and classes
+you access the name with the :: operator 
+   ie std::vector 
+to create a namespace:
+namespace myns{...} 
+Scope and Names are important to orient yourself in your code !! 
+
+namespace std - this is how all standard library headers are laid out 
+
+multiple files ccan belong to the same namespace, unlike Python 
+
+accessing Namespace Items;
+Fully qualified - std::cout << x << stdd::endl; 
+Using declaration - using std::cout; //thereafter just use cout 
+using directive - using namespace std; //everything #included can be used without std:: 
+
+the anon namespace - global variables are automatically public 
+- to privatize them, but them in a namespace 
+we call these variables "file static" (like scope)
+
+Ch. 9- Exceptions 
+
+to swallow- to ignore an exception and keep running code 
+if you have an exception thrown, it's taking cycles away from something else 
+
+they separate the source of the error from its solution
+They tell you that something is wrong. it sometimes tells you what is wrong. 
+
+An exception is an object. it is a string that is thrown or raised when the error happens. 
+
+defined in <stdexcept> 
+   logic_error -for programmer errors- preventable
+      domain_error, invalid_argument, length_error, out_of_range
+   runtime_error -usually based on input
+      range_error, overflow_error, enderflow_error
+
+unit testing can work with/alongside exceptions to check that your code works 
+
+defined in <exception>: exception 
+
+use a try-block to call functions that can fail 
+exception handlers introduced with catch-blocks 
+
+try {
+   Fraction fraction1(1, 0);
+}
+catch (logic_error& exc) { // invalid_argument is a logic_error 
+   cout << esc.what() << endl;
+}
+
+Fraction (int n = 0, int d = 1) {
+   if (d = 0)
+      throw invalid_argument("zero denominator not allowed");
+}
+
+More Exceptions:
+//checking the sides of a triangle 
+
+cin >> s1 >> s2 >> s3;
+
+double tr_area(double s1, double s2, double s3) {
+   if (s1 <= 0 || s2 <= 0 || s3 <= 0) {
+      throw runtime_error("sides must be greater than 0);
+   }
+   else if {
+      throw invalid_argument("any two sides must be greater than the third");
+   }
+
+   double semi_p = (s1 + s2 + s3)/2;
+   return sqrt(semi_p * (semi_p - s1) * (semi_p - s2) * (semi_p - s3));
+}
+
+try {
+   double area = tr_area (s1, s2, s3);
+}
+catch (out_of_range& ex) {
+   cout << "Exception caught: " << ex.what << endl;
+}
+catch (invalid_argument& ex) {
+   cout << "exception caught: " << ex.what << endl;
+}
+
+exceptions use a lot of memory, even if its never thrown 
+cin.exceptions(ios::failbit)
+call stacks keep track of where you are in a nest /code 
 
