@@ -638,3 +638,73 @@ int main() {
    
    return 0;
 }
+//7.11
+#include <iostream>
+
+using namespace std;
+
+void PrintNumPattern(int num1, int num2, bool forward=true, int count=0) {
+   
+   if (forward) {
+      if (num1 < 0) {
+         PrintNumPattern(num1, num2, false, count);
+      }
+      else {
+         cout << num1 << ' ';
+         count += 1;
+         PrintNumPattern(num1-num2, num2, true, count);
+      }
+   }
+   
+   else {
+      if (count >= 0) {
+         cout << num1 << ' ';
+         count -= 1;
+         PrintNumPattern(num1+num2, num2, false, count);
+      }
+   }
+}
+   
+   
+int main() {
+   int num1;
+   int num2;
+
+   cin >> num1;
+   cin >> num2;
+   PrintNumPattern(num1, num2);
+   
+   return 0;
+}
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+   string inputName;
+   int age;
+   // Set exception mask for cin stream
+   cin.exceptions(ios::failbit);
+
+   cin >> inputName;
+   while(inputName != "-1") {
+      try {
+         cin >> age;
+      }
+      catch(ios_base::failure) {
+         age = -1;
+         
+         // Clear failbit to be able to use cin again
+         cin.clear();
+         // Throw away the rest of the failed input line from cin buffer
+         string garbage;
+         getline(cin, garbage);
+      }
+      cout << inputName << " " << (age + 1) << endl;
+      cin >> inputName;
+   }
+   
+   return 0;
+}

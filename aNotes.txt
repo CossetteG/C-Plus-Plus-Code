@@ -2564,3 +2564,881 @@ exceptions use a lot of memory, even if its never thrown
 cin.exceptions(ios::failbit)
 call stacks keep track of where you are in a nest /code 
 
+An algorithm is a sequence of steps for solving a problem. 
+Some problems can be solved using a recursive algorithm. A recursive algorithm is an algorithm 
+that breaks the problem into smaller subproblems and applies the same algorithm to solve the 
+smaller subproblems.
+
+ Each function call places a new stack frame on the stack, for local parameters, 
+ local variables, and more function items. Upon return, the frame is deleted.
+
+Deep recursion could fill the stack region and cause a stack overflow, meaning a stack frame 
+extends beyond the memory region allocated for stack. Stack overflow usually causes the program 
+to crash and report an error like: segmentation fault, access violation, or bad access.
+
+Structs
+
+We typically pass structs to functions by reference.
+
+Struct basics:
+struct TimeHrMin {
+   int hourValue;
+   int minuteValue;
+};
+
+TimeHrMin ConvHrMin(int totalTime) {
+   TimeHrMin timeStruct;
+
+   timeStruct.hourValue  = totalTime / 60;
+   timeStruct.minuteValue = totalTime % 60;
+
+   return timeStruct;
+}
+   cout << travelTime.hourValue << " hrs ";
+   cout << travelTime.minuteValue << " mins";
+
+structs can hold any data types and can be put in vectors 
+
+struct CountryTvWatch {
+   string countryName;
+   int tvMinutes;
+};
+vector<CountryTvWatch> countryList(NUM_COUNTRIES);
+
+Objects
+ In programming, an object is a grouping of data (variables) 
+ and operations that can be performed on that data (functions).
+
+Abstraction means to have a user interact with an item at a high-level, with lower-level 
+internal details hidden from the user (aka information hiding or encapsulation). 
+Ex: An oven supports an abstraction of a food compartment and a knob to control heat. 
+An oven's user need not interact with internal parts of an oven.
+
+Objects strongly support abstraction, hiding entire groups of functions and variables, 
+exposing only certain functions to a user.
+
+An abstract data type (ADT) is a data type whose creation and update are constrained to 
+specific well-defined operations. A class can be used to implement an ADT.
+
+The class construct defines a new type that can group data and functions to form an object. 
+A class' public member functions indicate all operations a class user can perform on the object.
+The power of classes is that a class user need not know how the class' data and functions are 
+implemented, but need only understand how each public member function behaves. The animation 
+below shows a class' public member function declarations only; the remainder of the class 
+definition is discussed later.
+
+class Restaurant {                          // Info about a restaurant   
+   public:                                          
+      void SetName(string restaurantName);  // Sets the restaurant's name              
+      void SetRating(int userRating);       // Sets the rating (1-5, with 5 best)      
+      void Print();                         // Prints name and rating on one line   
+
+   ...
+};
+
+Declaring a variable of a class type creates an object of that type. Ex: Restaurant 
+favLunchPlace; declares a Restaurant object named favLunchPlace.
+
+The "." operator, known as the member access operator, is used to invoke a function on an 
+object. Ex: favLunchPlace.SetRating(4) calls the SetRating() function on the favLunchPlace 
+object, which sets the object's rating to 4.
+
+int main() {
+   Restaurant favLunchPlace;
+   Restaurant favDinnerPlace;
+
+   favLunchPlace.SetName("Central Deli");
+   favLunchPlace.SetRating(4);
+
+   favDinnerPlace.SetName("Friends Cafe");
+   favDinnerPlace.SetRating(5);
+
+   cout << "My favorite restaurants: " << endl;
+   favLunchPlace.Print();
+   favDinnerPlace.Print();
+
+   return 0;
+}
+
+string is a class- here are some string public member functions:
+char& at(size_t pos); // Returns a reference to the character at position pos in the string.
+size_t length() const; // Returns the number of characters in the string
+void push_back(char c); // Appends character c to the string's end (increasing length by 1).
+
+While you can define class data members as public, this is almost never done. One purpose of 
+a class is to provide users an interface (a set of public member functions) that manages data 
+for them. It is important for the class to directly control the data, not the end user.
+
+In addition to public member functions, a class definition has private data members: 
+variables that member functions can access but class users cannot. Private data members appear 
+after the word "private:" in a class definition.
+
+class Restaurant {                          // Keeps a user's review of a restaurant
+   public:                                    
+      void SetName(string restaurantName);  // Sets the restaurant's name        
+      void SetRating(int userRating);       // Sets the rating (1-5, with 5 best)    
+      void Print();                         // Prints name and rating on one line 
+   private:
+      string name;
+      int rating;
+};
+
+A programmer defining a class first declares member functions after the word "public:" 
+in the class definition. A function declaration provides the function's name, return type, 
+and parameter types, but not the function's statements.
+
+The programmer must also define each member function. A function definition provides a class 
+name, return type, parameter names and types, and the function's statements. A member function 
+definition has the class name and two colons (::), known as the scope resolution operator, 
+preceding the function's name. A member function definition can access private data members.
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Restaurant {                          // Info about a restaurant
+   public:
+      void SetName(string restaurantName);  // Sets the restaurant's name
+      void SetRating(int userRating);       // Sets the rating (1-5, with 5 best)
+      void Print();                         // Prints name and rating on one line
+   
+   private:
+      string name;
+      int rating;
+};
+
+// Sets the restaurant's name
+void Restaurant::SetName(string restaurantName) {
+   name = restaurantName;
+}
+
+// Sets the rating (1-5, with 5 best)
+void Restaurant::SetRating(int userRating) {
+   rating = userRating;
+}
+
+// Prints name and rating on one line
+void Restaurant::Print() {
+   cout << name << " -- " << rating << endl;
+}
+
+int main() {
+   Restaurant favLunchPlace;
+   Restaurant favDinnerPlace;
+   
+   favLunchPlace.SetName("Central Deli");
+   favLunchPlace.SetRating(4);
+   
+   favDinnerPlace.SetName("Friends Cafe");
+   favDinnerPlace.SetRating(5);
+   
+   cout << "My favorite restaurants: " << endl;
+   favLunchPlace.Print();
+   favDinnerPlace.Print();
+   
+   return 0;
+}
+
+Some C++ programmers always use this-> so that readers know that a data member is involved. 
+This is purely personal taste.
+
+Within a member function, the implicitly-passed object pointer is accessible via the name this. 
+In particular, a member can be accessed as this->member. The -> is the member access operator 
+for a pointer, similar to the "." operator for non-pointers.
+
+Using this-> makes clear that a class member is being accessed and is essential if a data 
+member and parameter have the same identifier. In the example below, this-> is necessary to 
+differentiate between the data member sideLength and the parameter sideLength.
+
+void ShapeSquare::SetSideLength(double sideLength) {
+   this->sideLength = sideLength;
+   // Data member      Parameter
+}
+
+Inline functions have a useful feature: the compiler inserts the needed code directly into the 
+executable, avoiding an actual function call when used at runtime. This skips pushing a new 
+stack frame for the called function, branching to its code, and returning to the calling code. 
+For a function that is called often, like in a loop, this can save a lot of execution time.
+
+Any function, not just member functions, can have this property by declaring them with the 
+inline keyword:
+
+inline
+int f(int m) {
+    ...
+}
+Although it is not efficient for large projects as far as build time goes, you can define 
+all of your member functions inline if you like, like other object-oriented programing 
+languages do. This can speed up runtime.
+
+not inline:
+class MyClass {
+   public:
+      void Fct1();
+   private:
+      int numA;
+};
+void MyClass::Fct1() {
+   numA = 0;
+}
+
+inline:
+class MyClass {
+   public:
+      void Fct1() {
+         numA = 0;
+      }
+   private:
+   int numA;
+};
+
+class Restaurant {                          // Info about a restaurant
+   public:
+      void SetName(string restaurantName) { // Sets the restaurant's name
+         name = restaurantName;
+      }
+      void SetRating(int userRating) {      // Sets the rating (1-5, with 5 best)
+         rating = userRating;
+      }
+      void Print();                         // Prints name and rating on one line
+   
+   private:
+      string name;
+      int rating;
+};
+
+// Prints name and rating on one line
+void Restaurant::Print() {
+   cout << name << " -- " << rating << endl;
+}
+
+A function name along its parameter list is called its signature. So you place const after a 
+member function's signature. If you separate the declaration of a member function from its 
+definition (that is, you don't declare it inline), you must use const after the signature in 
+both places, and it comes before the opening brace of the function body in its definition.
+
+A function's signature does not include its return type.
+
+Only member functions, not regular stand-alone functions, can be declared const, because the 
+const applies to the object/instance in use.
+
+A class' public functions are commonly classified as either mutators or accessors.
+
+A mutator function may modify ("mutate") a class' data members.
+An accessor function accesses data members but does not modify a class' data members.
+Commonly, a data member has two associated functions: a mutator for setting the value, and an 
+accessor for getting the value, known as a setter and getter function, respectively
+
+Accessor (getter) functions usually are defined as const to make clear that data members won't 
+be changed.
+
+class Restaurant {
+   public:
+      void   SetName(string restaurantName); // Mutator
+      void   SetRating(int userRating);      // Mutator
+      string GetName() const;                // Accessor
+      int    GetRating() const;              // Accessor
+      void   Print() const;                  // Accessor
+
+   private:
+      string name;
+      int rating;
+};
+
+void Restaurant::SetName(string restaurantName) {
+   name = restaurantName;
+}
+
+void Restaurant::SetRating(int userRating) {
+   rating = userRating;
+}
+
+string Restaurant::GetName() const {
+   return name;
+}
+
+int Restaurant::GetRating() const {
+   return rating;
+}
+
+void Restaurant::Print() const {
+   cout << name << " -- " << rating << endl;
+}
+
+A programmer commonly creates private functions, known as private helper functions, 
+to help public functions carry out tasks.
+
+class MyClass {
+   public:
+      void Fct1(); 
+   private:
+      int numA;
+      int FctX();
+};
+
+void MyClass::Fct1() {
+   numA = FctX();
+
+}
+
+int MyClass::FctX() {
+   ...
+}
+
+The in-class initialization occurs before the constructor runs.
+A good practice is to initialize all variables when declared. 
+This section deals with initializing the data members of a class when a variable of the 
+class type is declared.
+
+Since C++11, a programmer can initialize data members in the class definition. 
+Any variable declared of that class type will initially have those values.
+
+class Restaurant {
+   public:
+      void SetName(string restaurantName);
+      void SetRating(int userRating);
+      void Print();
+   
+   private:
+      string name = "NoName";  // NoName indicates name was not set
+      int rating = -1;         // -1 indicates rating was not set
+};
+
+C++ has a special class member function, a constructor, called automatically when a variable 
+of that class type is declared, and which can initialize data members. A constructor callable 
+without arguments is a default constructor, like the Restaurant constructor below.
+
+If a class has no programmer-defined constructor, then the compiler implicitly defines a 
+default constructor having no statements.
+
+class Restaurant {
+   public:
+      Restaurant();
+      void SetName(string restaurantName);
+      void SetRating(int userRating);
+      void Print();
+   private:
+      string name;
+      int rating;
+};
+
+Restaurant::Restaurant() {  // Default constructor
+   name = "NoName";         // Default name: NoName indicates name was not set
+   rating = -1;             // Default rating: -1 indicates rating was not set
+}
+
+You should always use constructor initializer lists for data members of class type that you 
+want initialized with arguments. As explained above, member objects are always 
+default-initialized unless they appear in the initializer list. Initializing them in the body 
+of the constructor means that they get "initialized" twice: first they are automatically 
+default-initialized, and then they are reassigned by your assignment statements in the 
+constructor body.
+
+Member objects requiring constructor arguments should ALWAYS appear in the initializer list 
+(and not in the constructor body).
+
+A constructor initializer list is an alternative approach for initializing data members in 
+a constructor, coming after a colon and consisting of a comma-separated list of 
+variableName(initValue) items.
+
+class SampleClass {
+   public:
+      SampleClass();
+}
+
+SampleClass::SampleClass() {
+   field1 = 100;
+   field2 = 200;
+}
+
+SampleClass::SampleClass() : field1(100), field2(200) {
+}
+
+The keyword static indicates a variable is allocated in memory only once during a program's 
+execution. Static variables are allocated memory once and reside in the program's static memory 
+region for the entire program. Thus, a static variable retains a value throughout the program.
+
+In a class, a static data member is a data member of the class instead of a data member of 
+each class object. Thus, static data members are independent of any class object, and can be 
+accessed without creating a class object.
+
+A static data member is declared inside the class definition, but must also be defined outside 
+the class declaration. Within a class function, a static data member can be accessed just by 
+variable name. A public static data member can be accessed outside the class using the scope 
+resolution operator: ClassName::variableName.
+
+class Store {
+   public:
+      Store(string storeName, string storeType);
+      int getId();
+      static int nextId;   // Declare static member variable  
+   private:
+      string name = "None";
+      string type = "None";
+      int id = 0;
+};
+
+Store::Store(string storeName, string storeType) {
+   name = storeName;
+   type = storeType;
+   id = nextId;   // Assign object id with nextId
+      
+   ++nextId;      // Increment nextId for next object to be created
+}
+...
+int Store::nextId = 101; // Define and initialize static data member
+
+A static member function is a class function that is independent of class objects. 
+Static member functions are typically used to access and mutate private static data members 
+from outside the class. Since static methods are independent of class objects, the this 
+parameter is not passed to a static member function. So, a static member function can only 
+access a class' static data members.
+
+class Store {
+public:
+   Store(string storeName, string storeType);
+   int getId();
+   static int getNextId();
+}
+
+int Store::getNextId() {
+   return nextId;
+}
+
+There are some exceptions to the advice above:
+
+For a class such as StoreItem above, where the member functions are small in number and size, 
+and easily inlined, it is usually preferable to inline all function definitions and place 
+everything in the .h file. Separate compilation is for code that is long and complicated, and 
+which is difficult for the compiler to make inline. (Note: Recursive functions cannot be 
+inlined.)
+
+For class templates, covered later in the course, all code must be placed in a .h file. 
+There is no separate compilation for templates.
+
+Programmers typically put all code for a class into two files, separate from other code.
+
+ClassName.h contains the class definition, including data members and member function declarations.
+ClassName.cpp contains member function definitions.
+
+StoreItem.h 
+   #ifndef STOREITEM_H
+   #define STOREITEM_H
+
+   class StoreItem {
+      public:
+         void SetWeightOunces(int ounces);
+         void Print() const;
+      private:
+         int weightOunces;
+   };
+
+   #endif
+
+StoreItem.cpp 
+   #include <iostream>
+   using namespace std;
+
+   #include "StoreItem.h"
+
+   void StoreItem::SetWeightOunces(int ounces) {
+      weightOunces = ounces;
+   }
+
+   void StoreItem::Print() const {
+      cout << "Weight (ounces): " << weightOunces << endl;
+   }
+
+main.cpp 
+   #include <iostream>
+   using namespace std;
+
+   #include "StoreItem.h"
+
+   int main() {
+      StoreItem item1;
+
+      item1.SetWeightOunces(16);
+      item1.Print();
+
+      return 0;
+   }
+
+compilation: (run code) 
+% g++ -Wall StoreItem.cpp main.cpp
+% a.out
+Weight (ounces): 16
+
+Like a chef who tastes food before serving, a class creator should test a class before 
+allowing use. A testbench is a program whose job is to thoroughly test another program 
+(or portion) via a series of input/output checks known as test cases. Unit testing means 
+to create and run a testbench for a specific item (or "unit") like a function or a class.
+
+Features of a good testbench include:
+
+Automatic checks. Ex: Values are compared, as in testData.GetNum1() != 100. 
+   For conciseness, only fails are printed.
+Independent test cases. Ex: The test case for GetAverage() assigns new values, vs. relying on 
+   earlier values.
+100% code coverage: Every line of code is executed. 
+A good testbench would have more test cases than below.
+Includes n
+
+   // Check set/get num1
+   testData.SetNum1(100);
+   if (testData.GetNum1() != 100) {
+      cout << "   FAILED set/get num1" << endl;
+   }
+
+Regression testing means to retest an item like a class anytime that item is changed; 
+if previously-passed test cases fail, the item has "regressed".
+
+A testbench should be maintained along with the item, to always be usable for regression 
+testing. A testbench may be in a class' file, or in a separate file as in MyClassTest.cpp 
+for a class in MyClass.cpp.
+
+Testbenches may be complex, with thousands of test cases. Various tools support testing, 
+and companies employ test engineers who only test other programmers' items. A large percent, 
+like 50% or more, of commercial software development time may go into testing.
+
+An erroneous unit test may fail even if the code being tested is correct. 
+
+If you provide any constructor at all for a class, the compiler will not provide a 
+default constructor; otherwise it will. If you do not provide a default constructor, 
+you can't create any objects unless you provide arguments for your non-default constructor(s).
+
+If the default constructor the compiler would have generated for you does what you want it 
+to in such a case, then you can explicitly ask the compiler to provide it:
+
+class Restaurant {
+   public:
+      Restaurant(string initName, int initRating);
+      Restaurant() = default;   // Note the default keyword
+      ...
+};
+
+int main() {
+   Restaurant foodPlace;        // This is okay now         
+}
+Not all classes need a default constructor (like Employee).
+
+Programmers often want to provide different initialization values when creating a new object. 
+A class creator can overload a constructor by defining multiple constructors differing in 
+parameter types. A constructor declaration can have arguments. The constructor with matching 
+parameters will be called.
+
+class Restaurant {
+   public:
+      Restaurant();
+      Restaurant(string initName, int initRating);
+
+   ...
+};
+
+// Default constructor
+Restaurant::Restaurant() {
+   name = "NoName";
+   rating = -1;
+}
+
+// Another constructor
+Restaurant::Restaurant(string initName, int initRating) {
+   name = initName;
+   rating = initRating;
+}
+
+int main() {
+   Restaurant foodPlace;              // Calls default constructor
+
+   Restaurant coffeePlace("Joes", 5); // Calls another constructor
+
+   ...
+}
+If a programmer defines any constructor, the compiler does not implicitly define a default 
+constructor, so good practice is for the programmer to also explicitly define a default 
+constructor so that a declaration like  MyClass x; remains supported. *or*
+
+class Restaurant {
+   public:
+      Restaurant(string initName = "NoName", int initRating = -1);
+      void Print();
+
+    private:
+      string name;
+      int rating;
+};
+
+C++ allows a programmer to redefine the functionality of built-in operators like +, -, and *, 
+to operate on programmer-defined objects, a process known as operator overloading
+
+class TimeHrMn {
+public:
+   TimeHrMn(int timeHours = 0, int timeMinutes = 0);
+   void Print() const;
+   TimeHrMn operator+(TimeHrMn rhs) ;
+private:
+   int hours;
+   int minutes;
+};
+
+// Overload + operator for TimeHrMn
+TimeHrMn TimeHrMn::operator+(TimeHrMn rhs) {
+   TimeHrMn timeTotal;
+   
+   timeTotal.hours   = hours   + rhs.hours; //rhs sstands for right hand side 
+   timeTotal.minutes = minutes + rhs.minutes;
+   
+   return timeTotal;
+}
+
+you can overload doubly so long as the parameters are different so the compiler knows which one to pick
+
+   TimeHrMn operator+(TimeHrMn rhs);
+   TimeHrMn operator+(int rhsHours);
+
+for equality operators, use
+bool operator==(const Restaurant lhs, const Restaurant rhs)
+
+// Equality (==) operator for two Review objects
+bool operator==(const Review& lhs, const Review& rhs) {
+   return (lhs.GetRating() == rhs.GetRating()) && 
+          (lhs.GetComment() == rhs.GetComment());
+}
+
+// Less-than (<) operator for two Review objects
+bool operator<(const Review& lhs, const Review& rhs) {
+   return lhs.GetRating() < rhs.GetRating();
+}
+//can be outside of the class declaration or inside
+
+A common approach is to first overload the == and < operators and then overload other 
+comparison operators using == and <.
+
+Overloading != using ==:
+
+bool operator!=(const Review& lhs, const Review& rhs) { return !(lhs == rhs); }
+
+Overloading >, <=, and >= using <:
+
+bool operator>(const Review& lhs, const Review& rhs)  { return rhs < lhs;    }
+bool operator<=(const Review& lhs, const Review& rhs) { return !(lhs > rhs); }
+bool operator>=(const Review& lhs, const Review& rhs) { return !(lhs < rhs); }
+
+It should be clear to you at this point that vector and string are just normal classes, 
+written in C++, just like any other class, including your own. They just happen to be 
+provided for you by the C++ standard library.
+
+The standard template library (STL) defines classes for common Abstract Data Types (ADTs). 
+A vector is an ADT of an ordered, indexable list of items. The vector ADT is implemented as a 
+class, actually a class template that supports different types such as vector<int> or 
+vector<string>
+
+VECTOR FUNCTIONS:
+at()	at(size_type n) 
+   Accesses element n.	
+   teamNums.at(3) = 99;    // Assigns 99 to element 3 
+   x = teamNums.at(3);     // Assigns element 3's value 99 to x
+
+size()	size_type size() const; 
+   Returns vector's size.	
+   if (teamNums.size() > 0) {  // Size is 5 so condition is true
+      ...
+   }
+   
+empty()	bool empty() const; 
+   Returns true if size is 0.	
+   if (teamNums.empty()) {  // Size is 5 so condition is false
+      ...
+   }
+
+clear()	Removes all elements. Vector size becomes 0.	
+   teamNums.clear();         // Vector now has no elements
+   cout << teamNums.size();  // Prints 0
+   teamNums.at(3) = 88;      // Error; element 3 does not exist
+
+push_back()	void push_back(const T& x);  
+   Copies x to new element at vector's end, increasing size by 1. Parameter is pass by reference to avoid making local copy, but const to make clear not changed.	
+   // Assume vector is empty
+   teamNums.push_back(77);  // Vector is: 77 
+   teamNums.push_back(88);  // Vector is: 77, 88
+   cout << teamNums.size(); // Prints 2
+
+erase()	iterator erase (iteratorPosition); 
+   Removes element from position. Elements from higher positions are shifted back to fill gap. Vector size decrements.	
+   // Assume vector is 77, 33, 88
+   teamNums.erase(teamNums.begin() + 1); // Now 77, 88
+   // (Strange position indication explained below)
+
+insert()	iterator insert(iteratorPosition, const T& x);
+   Copies x to element at position. Items at that position and higher are shifted over to make room. Vector size increments.	
+   // Assume vector is 77, 88
+   teamNums.insert(teamNums.begin() + 1, 33); // Now 77, 33, 88
+
+There are 3 ways to access items defined in a namespace:
+
+using namespace std;, or, using namespace imperial;. This makes all declared names in the 
+#included headers defining that namespace visible in the program being compiled. Never do 
+this in a header file, because any users of that header will have all those names visible, 
+potentially leading to name conflicts. It is okay to do this in a .cpp file, but think twice.
+
+using std::cout;, or using imperial::BiggerUnit;. This only makes visible the individual 
+names specified.
+
+Never use the using keyword and always fully qualify names: std::cout << n << std::endl;. 
+This can be tedious, but it is safest. This is how the C++ standard library implements its code.
+
+A namespace defines a region (or scope) used to prevent name conflicts. Above, the auditorium 
+seat class code can be put in an auditorium namespace, and airplane seat class code in an 
+airplane namespace. The scope resolution operator :: allows specifying in which namespace 
+to find a name, as in: auditorium::Seat concertSeat; and airplane::Seat flightSeat;.
+
+All items in the C++ standard library are part of the std namespace (short for standard). 
+To use classes like string or predefined objects like cout, a programmer can use one of two 
+approaches:
+
+Scope resolution operator (::): A programmer can use the scope resolution operator to specify 
+the std namespace before C++ standard library items. Ex: std::cout << "Hello"; or std::string 
+userName;
+Namespace directive: A programmer can add the statement using namespace std; to direct the 
+compiler to check the std namespace for any names later in the file that aren't otherwise 
+declared. Ex: For string userName;, the compiler will check namespace std for string.
+For code clarity, most programming guidelines discourage using namespace directives except 
+perhaps for std.
+
+EXEPTIONS 
+
+Note that we always catch exceptions by reference. One reason is that exceptions tend to be 
+objects of class type, and it is more efficient to not copy them. Another reason has to do with 
+inheritance, discussed later in the course.
+
+An exception is a circumstance that a program was not designed to handle, such as if the user 
+enters a negative height.
+
+Naively adding error-checking code using if-else statements obscures the normal code
+
+The language has special constructs, try, throw, and catch, known as exception-handling 
+constructs, to keep error-checking code separate and to reduce redundant checks.
+
+// ... means normal code
+...
+try {
+   ...   
+   // If error detected
+      throw objectOfExceptionType;
+   ...
+}
+catch (exceptionType excptObj) {
+   // Handle exception, e.g., print message
+}
+
+A try block surrounds normal code, which is exited immediately if a throw statement executes.
+A throw statement appears within a try block; if reached, execution jumps immediately to the 
+  end of the try block. The code is written so only error situations lead to reaching a throw. 
+  The throw statement provides an object of a particular type, such as an object of type 
+  "runtime_error", which is a class defined in the stdexcept library. The statement is said 
+  to throw an exception of the particular type. A throw statement's syntax is similar to a 
+  return statement.
+A catch clause immediately follows a try block; if the catch was reached due to an exception 
+  thrown of the catch clause's parameter type, the clause executes. The clause is said to catch 
+  the thrown exception. A catch block is called a handler because it handles an exception.
+
+catch (runtime_error& excpt) {
+      // Prints the error message passed by throw statement
+      cout << excpt.what() << endl;
+      cout << "Cannot compute health info." << endl;
+}
+
+common exception types:
+bad_alloc	         Failure in allocating memory
+ios_base::failure	   Failure in a stream (Ex: cin, stringstream, fstream)
+logic_error	         To report errors in a program's logic. Ex: out_of_range error 
+                     (index out of bounds)
+runtime_error	      To report errors that can only be detected at runtime. Ex: overflow_error 
+                     (arithmetic overflow)
+
+int main() {
+   int packageWidth;
+
+   cin >> packageWidth;
+
+   try {
+      if (packageWidth <= 0) {
+         throw runtime_error("Your input cannot be processed");
+      }
+      cout << "Package's width received: " << packageWidth << endl;
+   }
+   catch (runtime_error& excpt) {
+      cout << "Error: " << excpt.what() << endl;
+   }
+
+   return 0;
+}
+
+If no handler is found going up the call hierarchy, then terminate() is called, which typically 
+aborts the program.
+
+Different throws in a try block may throw different exception types. Multiple handlers may 
+exist, each handling a different type. The first matching handler executes; remaining handlers 
+are skipped.
+
+catch(...) is a catch-all handler that catches any type, which is useful when listed as the 
+last handler.
+
+// ... means normal code
+...
+try {
+   ...
+   throw objOfExcptType1;
+   ...
+   throw objOfExcptType2;
+   ...
+   throw objOfExcptType3;
+   ...
+}
+catch (ExcptType1& excptObj) {
+   // Handle type1
+}
+catch (ExcptType2& excptObj) {
+   // Handle type2
+}
+catch (...) {
+   // Handle others (e.g., type3)
+}
+... // Execution continues here
+
+A thrown exception may also be caught by a catch block meant to handle an exception of a base 
+class. If in the above code, ExcptType2 is a subclass of ExcptType1, then objOfExcptType2 will 
+always be caught by the first catch block instead of the second catch block, which is typically 
+not the intended behavior. A common error is to place a catch block intended to handle 
+exceptions of a base class before catch blocks intended to handle exceptions of a derived 
+class, preventing the latter from ever executing.
+
+STREAMS
+
+any cpp program takes input and produces and output 
+
+A stream is a general name given to a flow of data
+a stream is a sequence of bytes
+the source stream that provides data to programs is called input stream
+the destination stream receives output from the program is called output stream
+
+in header <iostream> a set of class is defined that supports I/O operations
+the classes used for input/output to the devices are declared in IOSTREAM file 
+The classes used for a disk file are declare in the FSTREAM file 
+
+Input device > Input Stream > Program > Output Stream > Output Device 
+
+ios (input output stream) -class
+   pointer to streambuf 
+      interface with physical devices
+   pointer to istream class
+      extraction operator >>, get(), getline(), and read()
+   pointer to ostream class 
+      Insertion operator <<, put(), write()
+
+      iostream is child of istream and ostream 
+         inherits from ^^
+         ios declared as the virtual base class so only one copy is inherited by iostream 
+
+      istream_withassign, iostream_withassign, ostream_withassign
+         adds assignment operators to its base classes 
