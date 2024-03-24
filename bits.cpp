@@ -1,7 +1,4 @@
-#include <iostream>
-#include <cassert>
 #include <bitset>
-#include "bits.h"
 
 class Bits {
     using IType = unsigned long long; // We only have to change the integer type here, if desired
