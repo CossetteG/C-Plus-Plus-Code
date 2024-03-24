@@ -661,7 +661,7 @@ stoi (str to int) stof stod
 can be dangerous! 
 
 RUNNING CODE 
-
+run code/ compile code
 g++ playground.cpp -o b 
 cd C:\Users\cosse\Desktop\msys2\ucrt64\bin\projects\helloworld\ 
 .\b.exe
@@ -3442,3 +3442,102 @@ ios (input output stream) -class
 
       istream_withassign, iostream_withassign, ostream_withassign
          adds assignment operators to its base classes 
+
+Pointers and Streams- Module 4
+
+a pointer is a variable that holds a memory address 
+use the & unary operator to get a variables address 
+commonly used for memory that changes at runtime 
+   ie vectors that may grow 
+to get at the value at the pointed-to address: 
+  use the dereference operator (unary*)
+& and * are two ways to get the memory address 
+
+int main()
+{
+   int i = 1;
+   int* p = &i;
+   cout << *p << " at " << p << endl;
+   int j = 2;
+   p = &j;
+   cout << *p << " at " << p << endl; 
+}
+
+Output:
+1 at 0x7ffee2cwhatever
+2 at 0x7ffee2cwhateva
+
+When you have a pointer within an array, you can add (subtract) and integer to it 
+the result is a pointer that many elements past (before)
+not bytes
+
+array decay- when you pass an array to a function, you pass the pointer to the first element, 
+but not how big the array is
+
+p[i] == *(p+i) aka &p[i] == p+i
+
+int a[] = {1,2,3,4,5};
+int* p = a; 
+sizeof(a) == 20
+sizeof(p) == 8
+*(p+2) == 3
+p[2] == a[2]
+p = a + 4;
+//count backwards from there 
+
+dereference
+*var - pass a pointer as a parameter or declare a new pointer 
+var* or var[i] dereference a pointer [array] 
+
+void copy(char* to, const char* from) {
+   while((*to++ = *from++) != '\0')
+      ;
+}
+
+cool trick. dont do it 
+
+subtracting pointers- make sure you have a base case
+a == &a[0]
+
+swap - switches the memory locations of two variables
+   void swap(int* a, int*b) {
+      int temp = *a; 
+      *a = *b;
+      *b = temp;
+   }
+
+
+int main() {
+   int x = 1;
+   int y = 2;
+   swap(x, y);
+   cout << x << ' ' << y;
+}
+
+data segment- where and local statics are stored, fixed addresses for the life of the program 
+runtime stack- where function parameters and non static local variableds go, exists only during the activation of one function call 
+the heap- memory explicitly requested during runtime, under programmer control 
+
+implementing vectors 
+a vector<var> manages a dynamic array of vars 
+located in the heap 
+elem is a pointer to a dynamic array of ints 
+requested from a bvector with the new operator 
+
+heap operators 
+new 
+   retunrs a pointer to a newly allocated item 
+   if an array, returns a pointer to the first element 
+delete 
+   returns memory to the heap 
+    can no longer be used 
+   if an array use delete [] ptr;
+   often called in class destructors 
+
+a string is also a cynamic array of characters 
+ using a terminating null byte '\0' as a delimiter 
+
+when a class instance goes out of scope meaning the scope it was defined in terminates 
+its destructor is called automatically 
+which by default calls destructors of each of its elements 
+ garbage collection 
