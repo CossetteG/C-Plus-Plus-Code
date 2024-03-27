@@ -3541,3 +3541,89 @@ when a class instance goes out of scope meaning the scope it was defined in term
 its destructor is called automatically 
 which by default calls destructors of each of its elements 
  garbage collection 
+
+ Destructors and Exceptions
+Remember: Destructors execute when an object goes out of scope 
+if an exception occurs?
+    destructors are called anyway
+    called stack unwinding
+    we don't want to leave things undone 
+
+vlc- download videos and stuff 
+
+class Foo {
+    int* p;
+public:
+    Foo(int x) {
+        p = new int(x);      //allocate heap memory
+        cout << *p << "allocated\n";
+    }
+    ~Foo() {
+        cout << *p << "deallocated\n";
+        delete p;
+        p = nullptr; //by classmate- do this or p may have wierd behavior 
+    }
+};
+
+void g() {
+    Foo b(2);
+    cout << "g\n"; //wont print
+}
+
+void f() {
+    Foo a(1);
+    g();
+    throw runtime_error("I give up!");
+}
+
+int main() {
+    try {
+        f();
+        cout << "this wont print\n";
+    }
+    catch(runtime_error& exc) {
+        cout << exc.what() << endl;
+    }
+}
+
+destructors should never throw exceptions!!
+    this breaks the whole idea of exceptions and memory
+    the exception is probably supposed to go somewhere else
+
+when exceptions occur
+    excecution checks for local handler
+    if not handled:
+        executes local destructors 
+
+exceptions and heap pointers 
+pointers do not have destructors
+but the objects they point to can 
+when an exception occurs 
+    the destructor will not be executed
+to the rescue- uniquie_ptr
+    places your pointer in an object with a destructor 
+    which will call delete on your pointer
+
+unique_ptr<Foo> p(new Foo(2));
+
+Shallow Copy- makes a copy of the pointer 
+    bad- changing one changes the other 
+    multiple deletes (error!) 
+
+Rule of Three 
+When classes manage resources (memory)
+need:
+    copy constructor- initialized from another object
+    assignment operator- overwritten from another object- delete things
+    destructor- frees resources
+
+heap objects 
+constructor called when allocated by the new operator
+delete operator calls the destructors 
+
+friend ostream& operator<<(ostream& os const Foo& f) { return os << f.n; }
+
+dry princible- don't repeat yourself
+ loosely couple things, make functions
+
+ 
