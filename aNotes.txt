@@ -3623,7 +3623,86 @@ delete operator calls the destructors
 
 friend ostream& operator<<(ostream& os const Foo& f) { return os << f.n; }
 
-dry princible- don't repeat yourself
+dry principle- don't repeat yourself
  loosely couple things, make functions
 
- 
+pointers and const (reference/dereferenced)
+
+const char* p = "the";
+   means that the character is const 
+   you can't say *p = 'c'
+
+char* const p = "the";
+   means that the pointer is const 
+   can't do ++p but you can do p[i]
+
+const char* const p = "the";
+   both are const
+
+the this-> pointer points to a const instance 
+   ^ itself is always const
+   dont change the address of an instance
+
+void f(int n) -> void f(C* const this, int n) 
+void f(int n) const -> void f(const C* const this, int n)
+member = value -> this->member = value 
+
+php, sql, mysql, javascript
+
+recursive definition for array dimentions 
+base case- a 0 dimentional array is a single value (scalar)
+general case- an n-dimentional arra is an array of n-1 dimensional arrays 
+
+array of arrays 
+int a[2][3] 
+    an array of 2 elements
+    each element is an array of 3 ints 
+    a is an array of 2 arrays of 3 ints 
+    sizeof(a[0]) = 12 (4*3)
+
+
+auto p = new int[2][3][4]; 
+int ***p = new int[2][3][4]; 
+int(*p)[3][4] = new int[2][3][4]; 
+
+Array Types 
+the size of an array is part of its type
+int a[3] and int a[4] are distinct types 
+pointer decay and array decay are common bc of this 
+   A3_i -> Pi 
+
+typeid(obj).name() typing things 
+
+pass an array to a function/ method 
+
+void print_array(int (&a)[5]) {
+   cout << sizeof(a) << endl;
+   for (int k: a) 
+      {cout << k << endl;}
+}
+
+template<size_t N>                  // with this you can have any size of array because the template tells it the size that 
+void print_array(int (&a)[N]) {     // is associated with the array
+   cout << sizeof(a) << endl;
+   for (int k: a) 
+      {cout << k << endl;}
+}
+
+for (const auto &row: a) {
+   cout << "sizeof(row):"
+}
+
+multi-dimensional arrays and range- based loops 
+loops iteterate though top level elements 
+
+multidimentional arrays require using reference loop variables 
+   except on innermost values 
+
+declare on the heap:
+   int (*p)[3] = new int[2][3]
+   auto p = new int [2][3]
+   sizeof(p) 
+   typeid(p) 
+   sizeof(*p)
+   typeid(*p)
+
