@@ -3,6 +3,7 @@
         "array": "cpp",
         "bitset": "cpp",
         "string_view": "cpp",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "iostream": "cpp"
     }
 }
