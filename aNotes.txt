@@ -464,6 +464,9 @@ int main() {
 
 The static_cast operator (static_cast<type>(expression)) converts the expression's value to the indicated type. 
 Ex: If myIntVar is 7, then static_cast<double>(myIntVar) converts int 7 to double 7.0.
+convert to string: to_string(int)
+convert to int stoi(string)
+convert to double stod(string)
 
    int kidsInFamily1;       // Should be int, not double
    int kidsInFamily2;       // (know anyone with 2.3 kids?)
@@ -3356,6 +3359,17 @@ logic_error	         To report errors in a program's logic. Ex: out_of_range err
 runtime_error	      To report errors that can only be detected at runtime. Ex: overflow_error 
                      (arithmetic overflow)
 
+Defined in <stdexcept>:
+• logic_error (for programmer errors--preventable)
+• domain_error; invalid_argument;
+• length_error; out_of_range;
+• runtime_error (for end-user errors)
+• range_error; overflow_error;
+• underflow_error;
+• logic_error and runtime_error are often sufficient
+• Defined in <exception>:
+• exception (the base class for all exceptions; rarely used)
+
 int main() {
    int packageWidth;
 
@@ -3442,6 +3456,41 @@ ios (input output stream) -class
 
       istream_withassign, iostream_withassign, ostream_withassign
          adds assignment operators to its base classes 
+
+Reading and Writing to/from a file 
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+int main() {
+    fstream new_file;
+    
+    // Open a file to perform a write operation using a file object.
+    new_file.open("xyz.txt", ios::out); 
+    
+    // Checking whether the file is open.
+    if (new_file.is_open()) {
+        new_file << "My Function \n"; // Inserting text.
+        new_file.close(); // Close the file object.
+    }
+    
+    // open a file to perform read operation using file object.
+    new_file.open("xyz.txt", ios::in); 
+    
+    // Checking whether the file is open.
+    if (new_file.is_open()) { 
+        string sa;
+        // Read data from the file object and put it into a string.
+        while (getline(new_file, sa)) { 
+            // Print the data of the string.
+            cout << sa << "\n"; 
+        }
+        
+        // Close the file object.
+        new_file.close(); 
+    }
+}
 
 Pointers and Streams- Module 4
 
@@ -3706,3 +3755,609 @@ declare on the heap:
    sizeof(*p)
    typeid(*p)
 
+Linked Lists- data structure for flexible ordering 
+faster to insert elements in the middle than arrays - vectors/ arrays have to shuffle 
+a linked list is a sequence of nodes 
+each node contains 2 items: the data element and a pointer to the next node 
+   (like dictionaries)
+to insert, simiply rearrange the pointers 
+there's a head and and a tail. 
+
+Streams Class Heirarchy 
+
+std::ios 
+   std::istream- getline, get, read, >>
+        ifstream- open, close
+        istringstream- str 
+   std::ostream- put, write, <<
+        ofstream- open, close
+        ostringstream- str 
+   Stream State:
+      good
+      fail (no data)
+      eof (end of file)- fail flag 
+      bad - fail flag, usually a device error
+
+      !fail = good 
+      reset with .clear() 
+
+      (const istream& is ) { is.fail() //bool }
+
+FILE STREAMS 
+   the constructor automatically opens the file 
+   the destructor auto closes the file 
+   you gotta check the stream state when you use files 
+
+   istringstream input_line(line); // is a data type
+   int id;
+   iss >> id >> first >> last; //breaks the line into id, first, last delimited by a space 
+   emps.emplace_back(id, first, last);
+
+   the operator<< is pretty easy to overload (output)
+   the operator>> is harder bc you need to set the streams state and make sure its good for 
+      every iteration
+
+command-line arguments, similar to sys.argv in python 
+   in c++ they are optional arguments to main:
+   int main(int argc, char* argv[]) 
+      argc is how many flags you want 
+      argv is the flag names 
+
+                  //count        vector
+      int main(int argc, char*argv[]) {
+         if (argc == 3) {
+            vector<int> data = atoi(argv[0]);
+            read_data(argv[1], data);
+            write_data(argv[2], data);
+         }
+      }
+
+      (then in the terminal)
+      ./args.exe (arguments) 
+
+EXAM 2 
+no return on structs
+static data belongs to the class 
+in situ- inline
+scope :: operator 
+constructor initializer lists 
+   insert code after a ";" but befor the constructor body 
+a class instance is composed of its data members 
+synthesized copy constructor is created automatically
+& location *unary address 
+deterministic scope- early garbage collection 
+heap objects new/delete 
+abstract base classes 
+
+1- inheritance is a, composition has a 
+2- interface to hide the implementation 
+3- initialization 
+4- polymorphism 
+5- virtual functions 
+
+#include <iostream> 
+using namespace std; 
+
+class School { 
+   public: 
+      School() { y++; } 
+      static int getY() {return y;} 
+   private:
+      static int y;
+}; 
+
+int School::y = 0; 
+
+int main() { 
+   cout << School::getY() << " "; 
+   School t[5]; 
+   cout << School::getY(); 
+}
+
+module 5
+
+inheritance
+
+uml - new project :DDDD
+soccer roster 
+
+base class >
+derived class 
+
+substitutablilty 
+
+don't instantiate abstact classes, only leaf classes 
+
+class Circle : public Shape {}
+child class
+
+polymorphisim- in the heap 
+gotta use pointers 
+declaring the same function but with different parameters
+
+vtable-pointers to itss function implementations
+vptr-
+they have the ability to see stuff, more backend stuff
+
+protected- in between public and private 
+allows family members to edit but no one else /members of the hierarchy
+
+overload- same name different signature 
+override- same name same signature different implementation
+
+polymorphism is usuing virtual functions in an abstract way
+keyword override
+
+deleting needs to be polymorphic too 
+
+virtual ~Circle() {} 
+encapsulation
+
+Module 6 
+ 
+turn stuff in!!!!
+
+parrallelism- not in zybooks 
+
+you can make type a parameter with a template 
+for any function that the logic is the same across types 
+
+template<typename T>
+void swap(T& x, T& y) {//swap values
+   T temp = x;
+   x= y;
+   y= temp;
+}
+
+ints a, b = 1, 2;
+swap(a, b);
+
+string s("one"), t("two");
+swap(s, t);
+
+the compiler creates separate copies of the function based on what you input into it 
+(only pay for what you use)
+
+templates can have multiple template parameters (parameters can be types or integers)
+it infers separate function template parameters based on the call
+
+a class template- 
+   argumetns must be specified
+   a safe array class template
+   fixed size no memory overhead
+   but checks for access errors
+
+template<typename T, size_t N>
+class Array {
+   T data[N] = {};
+   
+   T set () {};
+
+   T* begin () {}
+}
+
+template<typename T, size_t N> 
+void print_array(Array<T,N>& arr) {
+   cout << N << " elements of type " << T&
+}
+
+a template is not a type- it's a blueprint for instantiating functions or classes 
+
+vector<int> is a type, vector<T> is a generic type 
+
+template code 100% goes in the .h file 
+ including function bodies 
+ templates are not code, but instructions for generating code 
+ you can make templates inline 
+
+recommended- create a template for your header files and your source files 
+keep a toolbelt 
+
+
+getting a pointer to a class:
+
+int main(void) {
+   Box Box1(3.3, 1.2, 1.5);    // Declare box1
+   Box Box2(8.5, 6.0, 2.0);    // Declare box2
+   Box *ptrBox;                // Declare pointer to a class.
+
+   // Save the address of first object
+   ptrBox = &Box1;
+
+   // Now try to access a member using member access operator
+   cout << "Volume of Box1: " << ptrBox->Volume() << endl;
+
+   // Save the address of second object
+   ptrBox = &Box2;
+
+   // Now try to access a member using member access operator
+   cout << "Volume of Box2: " << ptrBox->Volume() << endl;
+  
+   return 0;
+}
+
+Declare a vector of pointers like this: vector<MyClass*> vec; 
+
+creating classes in a loop:
+enemyClass* someNewEnemyObjectPointer = new someNewEnemyObject();
+vectorOfEnemies.push_back(someNewEnemyObjectPointer);
+
+
+a computer simplified:
+
+input > CPU (Control Unit, Logic Unit) > Output
+        V  ^
+      Memory Unit
+
+CPU's are always much faster than i/o
+so if you have a faster CPU, it will idle waiting on the i/o 
+while the cpu is waiting, we can give it other things to work on, supported by the programming language 
+however, if the program takes LOTS of computation, 
+newer computers have multiple cpu cores- then we can take advantage of the multiple cores (let the os manage it)
+
+Ctr + Shift + Esc to pull up task manager
+
+Concurrency
+   when multiple independent tasks are logicallh active at the same time, they may still take turns 
+   this is possible on a single-processor, in which case it is colled cooperative multitasking 
+
+Parallelism 
+   multiple independent tasks actually running simultaneously- a special case of concurrency. this requires 
+   multiple processors and cores 
+
+
+single thread of execution 
+Threads 
+A piece of code (usually a function) that can run concurrently with other threads 
+multiple tasks- they can share the same CPU, taking turns while waiting for i/o 
+they can run at the same time on separate cpus 
+
+Programmatically, it's the same mechanism
+   we let the operating system or hardware to do the actual assigning of tasks 
+
+create a thread object 
+   you pass it the name of the function for that task 
+   the constructor launches a system thread immediately 
+   the main prgram continues to run 
+      now you have 2 threads 
+   
+Join 
+eventurally you have to wait for a thread to finish 
+the calling thread waits for its child thread to finish 
+call .join() to wait for the child thread to finish 
+- join can halt your entire thread so be careful with it 
+
+int main() {
+   thread t1{func_name, "It's a Dessert Topping"}
+   t1.join()
+}
+
+shared resources- input and output streams, data in memory that is shared
+when one thread is using a resource, we must block other threads from using it. 
+
+Mutexes (mutual exclusion) 
+has lock and unlock operatoins 
+only one thread at a time can hold the lock 
+effectively synchronizes blocks of code 
+the mutex must exist outside the scope of the threas functions 
+you can have as many mutexes as you want 
+
+mutex m;
+
+void func () {
+   m.lock()
+   //code
+   m.unlock()
+}
+
+int main() {
+   thread t1{func_name, "It's a Dessert Topping"}
+   t1.join()
+}
+
+
+locks and exception safety- if you have an exception, unlock will not be called!
+RAII - resource aquisition is initialization 
+
+void func () {
+   lock_guard<mutex> lck(m)
+   //code
+}
+
+deadlocks are evil, use Ctr + C to break out of them 
+
+this_thread::sleep_for(chrono::milliseconds(300));
+
+lock(mtx1, mtx2);
+lock_guard<mutex> lock1 (mtx1, adopt_lock);
+lock_guard<mutex> lock2 (mtx2, adopt_lock);
+
+dining philosophers- 
+
+Generic Algorithms 
+
+function templates that have type parameters 
+commonly needed behavior for handling data 
+   they use begin and end iterators to travers data 
+   work for any sequence, including arrays 
+   binary_search, copy, find, sort, transform 
+almost 100 algorithms in the standard c++ library 
+minimizes the number of loops you need to write 
+
+iterators 
+act like pointers to elements in a sequence 
+begin- 0, end -n 
+different containers have different tupes of iterators 
+
+std:: find()
+returns the iterator for the first occurrence of the seach key 
+iter = find(authorList.begin(), authorList.end(), "Dazai"); 
+cout << *iter << endl;
+
+find_if()
+iter = find(authorList.begin(), authorList.end(), isGay); 
+                                          function^ (must take the vector/list type and return bool)
+               
+sort()
+sorts a contiguous sequence in place 
+can give it a comparison functio to alter the order 
+default is ascending 
+
+sort(nums.begin(), nums.end())
+sort(nums.begin(), nums.end(), sortDescending)
+
+bool sortDescending(int i, int j) {return i > j;}
+
+back_inserter 
+turns writing a vector into appending 
+
+map
+to write lambda functions within line- [](int n){return n % 2 == 0} //is even
+
+
+istream_iterator 
+
+vector<int> nums{istream_iterator<int>(ifs), istream_iterator<int>()}; 
+sort(begin(nums), end(nums), gt); 
+
+funcion objects- objects that can be called as functions 
+
+struct gt_n {
+   int key;
+   gt_n(int key) {
+      this->key = key;
+   }
+   bool operator() (int n) {
+      return n > key;
+   }
+}
+
+while ((iter = find_if(iter, v.end(), gt10)) != v.end()) {} 
+
+lambda expressions:
+[](int n){return n > 15;} 
+[] - capture directive
+
+in the code: 
+while ((iter = find_if(iter, v.end(), [](int n){return n > 15;})) != v.end()) {}
+
+auto even = [](int num) {return num % 2 == 0;} 
+
+string is a container- it comes with an iterator 
+
+lambda capture - 
+Another advantage with function objects is that the 
+comparison key can be input from the user or from some other source:
+
+Standard C++ Containers 
+   sequences- vector, list, deque, array 
+      array 
+         at
+         operator[ ]
+         Access an element with bounds checking
+         Access an element without bounds checking
+         front	Access first array element ([0]), for both reading and writing
+         back	Access last array element ([size()-1]) for both reading and writing
+         begin
+         end	The usual behavior for container iterators
+         empty	Is size( ) == 0?
+         size	Returns the number of elements in the allocation
+         relational operators	array-wise <, <=, >, >=, ==, !=
+      list - doubly linked list (and forward_list)
+         front()	
+         exList.front();  // returns 6
+         back()	
+         exList.back(); // returns 1
+         push_back()	void push_back(newElement)
+
+         Adds newElement to the end of the list. List's size is increased by one.	
+         // Assume list is empty
+         exList.push_back(4);    // List is: 4 
+         exList.push_back(5);    // List is: 4, 5
+         push_front()	void push_front(newElement)
+
+         Adds newElement to the beginning of the list. List's size is increased by one.	
+         // Assume list is empty
+         exList.push_front(7);    // List is: 7 
+         exList.push_front(9);    // List is: 9, 7
+         size()	size()
+
+         Returns the number of elements in the List.	
+         // Assume list is empty
+         exList.size(); // returns 0
+
+         exList.push_back(25);
+         exList.push_back(13);
+         // List is now: 25, 13
+
+         exList.size(); // returns 2
+         pop_back()	void pop_back()
+
+         Removes element from the end of the list. List's size is decreased by one.	
+         // Assume list is: 3, 11, 6, 6
+         exList.pop_back();    // List is: 3, 11, 6
+         exList.pop_back();    // List is: 3, 11
+         pop_front()	void pop_front()
+
+         Removes element from the front of the list. List's size is decreased by one.	
+         // Assume list is: 3, 11, 6, 6
+         exList.pop_front();    // List is: 11, 6, 6
+         exList.pop_front();    // List is: 6, 6
+         remove()	void remove(existingElement)
+
+         Removes all occurrences of elements which are equal to existingElement. List's size is decreased by number of existingElement occurrences.	
+         // Assume List is: 3, 11, 6, 6
+         exList.remove(6); // List is now: 3, 11   
+         exList.remove(11); // List is now: 3
+      Pairs and Tuples
+         .first and .second 
+         as loop indexes
+
+         using triple = tuple<int, string, double>;
+         triple t(1, "tree", 2.5);
+         auto y = get<0>(t);
+
+         std::pair<std::string, std::string> aPair = std::make_pair(s1, s2);
+         std::pair<std::string, std::string> *p = &aPair;
+         record.wait_list.push_back(p);
+
+      set - 
+         allows no duplicates 
+         orders by less than
+
+         set<string> words;
+         words.insert(word); 
+      multiset aka bag 
+         can hold duplicates
+         useful for checking for subsets 
+      map 
+         stores key, value pairs 
+         ordered container 
+         map<string, string> mymap;
+         ++mymap["hello"];
+         mymap["greet"] = "hello";
+         
+   specialized containers-  
+
+
+class Person {
+   public:
+      virtual void PrintInfo() = 0;
+      void PrintInformation() {
+         cout << "In Base Class People" << endl;
+      }
+   protected:
+      string name;
+      int age;
+};
+class Teacher : public Person {
+   public:
+      void PrintInfo() {
+         cout << "In Child Class Teacher" << endl;
+   }
+   private:
+      int experience;
+};
+
+
+string formatting or fstring 
+#include <format>
+format("Hello {}!\n", "world");
+
+FINAL EXAM REVIEW 
+thursday - saturday 
+
+
+Inheritance 
+class relationships 
+   encapsualtes data adn behavior to create objects
+is-a (inheritance)
+   one class is a specialization of another 
+   a car is a vehicle
+has a (composition)
+   a car has a wheel 
+classes can also just collaborate 
+   one clas uses another's methods 
+inheritance 
+   implements is a relationships
+
+the ubiquitous shape hierarchy
+   hierarchical relationships 
+   code shareing 
+   all comman data and functions are defined once and shared by all derived classes 
+abstract base classes 
+   not meant to be instantiated 
+   establish interfase for the users of the class
+the leaf classes are concrete
+   they are meant to be instantiated 
+    has things specific to it 
+
+abstract member functions should be overridden in child classes 
+polymorphism 
+   determining what to run based on data types 
+   can be used with pointers or references 
+
+Pointers often point to heap memory 
+   new operator 
+   
+virtual functions 
+   each instance has a vptr 
+   use protected access (in between public and private )
+   allows derived classes access 
+
+base class constructors
+initialize via the construcor initializer list  
+
+destructors need to be polymorphic too 
+remember to deconstruct your pointers 
+\
+templates<typenameT>  
+class templates must be instantiated explicitly
+
+vector is not a type but vector<int> is 
+template code whould be 100% in .h file 
+all template code should be inline 
+
+threads  
+a piece of code that can run concurrently with other threads 
+used becuase cpus are way faster than i/o  
+mutex to lock and unlock so they dont step on eachother
+call join() to finish off a thread 
+
+each thread has its own copy of local variables 
+race conditions - threads stepping on eachother 
+lock_guard- RAII wrapper for mutexes 
+when you have multiple locks its easy to deadlock - the chinese finger trap of code 
+
+generic algorithms 
+use begin() and end() 
+use iterators 
+
+find, sort, back_inserter
+istreamer 
+
+lambda [](parameters){function body}
+can capture by value or reference 
+
+containers 
+vector, list, array 
+ordered and unordered containers 
+pairs and tuples 
+set- allows no duplicates 
+map- key, value pairs
+
+----------
+order of operations 
+switch /case statements
+loop 
+pay attention 
+vectors and vector functions 
+follow the logic, say things out loud  
+polymorphisim and how mutable 
+complete the program 
+scoping 
+whats the output?
+exceptions 
+find the error in the code 
+uml diagrams 
+49 questions 

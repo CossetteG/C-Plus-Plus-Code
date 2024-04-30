@@ -1,12 +1,19 @@
 // #ifndef VECTOR_H
 // #define VECTOR_H
  
+// #include <cstddef>
+// #include <iostream>
+// #include <cassert>
+#ifndef VECTOR_H
+#define VECTOR_H
+
+ 
 #include <cstddef>
 #include <iostream>
 #include <cassert>
 using std::size_t;
-// using std::cout;
-// using std::endl;.
+using std::cout;
+using std::endl;
 
 class Vector {
     enum {CHUNK = 10};
@@ -66,9 +73,13 @@ public:
     };
     
     Vector& operator=(const Vector& v) {    // Copy assignment operator
-        data_ptr = v.data_ptr;
+        data_ptr = new int[v.capacity];
         capacity = v.capacity;
         n_elems = v.n_elems;
+        
+        for (int i=0; i<n_elems; i++) {
+            data_ptr[i] = v.data_ptr[i];
+        }
         return *this;
     };  
     
@@ -90,7 +101,8 @@ public:
     };
     
     int at(size_t pos) const {   // Return element in position "pos" (0-based)
-        assert((pos >=0) && (pos < n_elems));
+        if ((pos <0) || (pos >= n_elems)) 
+            {throw std::range_error("Out of rage (at func)");}
         // assert(typeid(data_ptr[pos]) == typeid(j));
         return data_ptr[pos];
     };
@@ -130,7 +142,9 @@ public:
     };
     
     void erase(size_t pos) {    // Remove item in position pos by shuffling left
-        assert((pos >=0) && (pos < n_elems));
+        if ((pos <0) || (pos >= n_elems)) 
+            {throw std::range_error("Out of rage (erase func)");}
+
         for (int i=0; i<n_elems-1; i++) { 
             if (i >= pos) {
                 data_ptr[i] = data_ptr[i+1];
@@ -140,7 +154,9 @@ public:
     }
     
     void insert(size_t pos, int item) {     // Shuffle items right to make room for new element
-        assert((pos >= 0) && (pos <= n_elems));
+        if ((pos <0) || (pos >= n_elems)) 
+            {throw std::range_error("Out of rage (insert func)");}
+            
         if (n_elems >= capacity) {grow();}
         for (int i=n_elems; i>=0; i--) {
             if (i > pos) {
@@ -187,4 +203,5 @@ public:
         return true;
     }; 
 };
-// #endif
+
+#endif
